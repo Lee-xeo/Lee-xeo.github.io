@@ -1,0 +1,78 @@
+{
+    "en": {
+        "pageTitle": "Your Name - Personal Homepage",
+        "name": "Your Name",
+        "title": "Ph.D. Candidate in Computer Science, Example University",
+        "bio": "I am a researcher focusing on machine learning, natural language processing, and data science. My goal is to develop intelligent systems that can understand and interact with the world in a more human-like way.",
+        "labAffiliationTitle": "Lab Affiliation",
+        "publicationsTitle": "Publications",
+        "footerText": "All rights reserved.",
+        "publications": [
+            {
+                "title": "The Principles of Modern Web Design and Development",
+                "authors": "Alex Johnson, **Your Name**, Emily White",
+                "venue": "International Conference on Web Technologies (ICWT), 2024",
+                "links": {
+                    "Paper": "#",
+                    "Code": "#",
+                    "Slides": "#"
+                }
+            },
+            {
+                "title": "A Novel Approach to Machine Learning Optimization",
+                "authors": "**Your Name**, David Chen",
+                "venue": "Journal of Artificial Intelligence Research (JAIR), Vol. 80, 2023",
+                "links": {
+                    "Paper": "#",
+                    "arXiv": "#"
+                }
+            },
+            {
+                "title": "Data-Driven Insights for Urban Planning",
+                "authors": "Maria Garcia, **Your Name**, Leo Kim",
+                "venue": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD), 2022",
+                "links": {
+                    "Paper": "#"
+                }
+            }
+        ]
+    },
+    "zh": {
+        "pageTitle": "你的名字 - 个人主页",
+        "name": "你的名字",
+        "title": "某某大学计算机科学博士生",
+        "bio": "我是一名专注于机器学习、自然语言处理和数据科学领域的研究者。我的目标是开发能够以更人性化的方式理解世界并与世界互动的智能系统。",
+        "labAffiliationTitle": "所属实验室",
+        "publicationsTitle": "学术出版",
+        "footerText": "版权所有。",
+        "publications": [
+            {
+                "title": "现代网页设计与开发的原理",
+                "authors": "Alex Johnson, **你的名字**, Emily White",
+                "venue": "国际网络技术会议 (ICWT), 2024",
+                "links": {
+                    "论文": "#",
+                    "代码": "#",
+                    "幻灯片": "#"
+                }
+            },
+            {
+                "title": "一种机器学习优化的新方法",
+                "authors": "**你的名字**, David Chen",
+                "venue": "人工智能研究杂志 (JAIR), 第80卷, 2023",
+                "links": {
+                    "论文": "#",
+                    "arXiv": "#"
+                }
+            },
+            {
+                "title": "面向城市规划的数据驱动洞察",
+                "authors": "Maria Garcia, **你的名字**, Leo Kim",
+                "venue": "ACM知识发现与数据挖掘会议 (KDD), 2022",
+                "links": {
+                    "论文": "#"
+                }
+            }
+        ]
+    }
+}

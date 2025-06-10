@@ -1,0 +1,35 @@
+[
+    {
+        "name": "Light",
+        "colors": {
+            "--bg-color": "#ffffff",
+            "--text-color": "#333333",
+            "--heading-color": "#111111",
+            "--accent-color": "#0056b3",
+            "--secondary-bg-color": "#f8f9fa",
+            "--border-color": "#dee2e6"
+        }
+    },
+    {
+        "name": "Dark",
+        "colors": {
+            "--bg-color": "#1a1a2e",
+            "--text-color": "#e0e0e0",
+            "--heading-color": "#ffffff",
+            "--accent-color": "#76a9ff",
+            "--secondary-bg-color": "#16213e",
+            "--border-color": "#2a3b5c"
+        }
+    },
+    {
+        "name": "Sepia",
+        "colors": {
+            "--bg-color": "#fbf0d9",
+            "--text-color": "#5b4636",
+            "--heading-color": "#3d2c1d",
+            "--accent-color": "#8d6e63",
+            "--secondary-bg-color": "#f5e5c5",
+            "--border-color": "#dcd0b9"
+        }
+    }
+]
