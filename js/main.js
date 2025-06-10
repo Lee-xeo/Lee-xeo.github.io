@@ -79,8 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 使用正则表达式查找所有 [文本](链接) 格式并替换为 <a> 标签
                 const linkRegex = /\[(.*?)\]\((.*?)\)/g;
                 const processedText = text.replace(linkRegex, '<a href="$2" target="_blank">$1</a>');
-
-                element.innerHTML = processedText;
+                // 替换换行符为 <br> 标签
+                const finalText = processedText.replace(/\n/g, '<br>');
+                element.innerHTML = finalText;
             }
         });
 
