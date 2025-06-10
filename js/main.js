@@ -74,7 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('[data-lang-key]').forEach(element => {
             const key = element.getAttribute('data-lang-key');
             if (langContent[key]) {
-                element.innerHTML = langContent[key];
+                let text = langContent[key];
+
+                // 使用正则表达式查找所有 [文本](链接) 格式并替换为 <a> 标签
+                const linkRegex = /\[(.*?)\]\((.*?)\)/g;
+                const processedText = text.replace(linkRegex, '<a href="$2" target="_blank">$1</a>');
+
+                element.innerHTML = processedText;
             }
         });
 

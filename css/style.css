@@ -32,6 +32,7 @@ h1, h2 {
     padding-bottom: 10px;
     margin-top: 40px;
     margin-bottom: 20px;
+    white-space: pre-wrap;
 }
 
 a {
@@ -108,8 +109,8 @@ a:hover {
 }
 
 .profile-pic {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     object-fit: cover;
     border: 5px solid var(--secondary-bg-color);
@@ -138,42 +139,79 @@ a:hover {
     margin-top: 20px;
 }
 
-.social-links a {
-    font-size: 1.8em;
+/* 为所有社交链接和地址项设置通用样式 */
+.social-links > * {
+    display: inline-flex; /* 使用Flex布局，方便对齐内部的图标和文字 */
+    align-items: center; /* 垂直居中对齐 */
+    font-size: 1.8em; /* 控制图标的大小 */
     margin-right: 20px;
     color: var(--text-color);
     opacity: 0.8;
+    text-decoration: none; /* 确保链接也没有下划线 */
 }
 
+/* 仅为可点击的链接 a 标签设置悬停效果 */
 .social-links a:hover {
     color: var(--accent-color);
     opacity: 1;
 }
 
+/* 专门为地址项里的文字设置样式 */
+.location-item span[data-lang-key="location"] {
+    font-size: 0.6em; /* 文字大小是图标大小的一半 */
+    margin-left: 8px; /* 在图标和文字之间增加一点间距 */
+    font-family: 'Lato', sans-serif; /* 确保它使用正文字体 */
+    font-weight: normal;
+}
+
 /* Lab Section */
 .lab-section {
-    text-align: center;
-    margin-top: 40px;
-    padding: 20px 0;
+    margin-top: 20px;
+    padding: 12px; /* 内边距 */
     background-color: var(--secondary-bg-color);
     border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.lab-content {
+    display: flex; /* 开启 Flexbox 布局 */
+    align-items: center; /* 垂直居中对齐 */
+    gap: 20px; /* 在文字和 Logo 之间创建一些间距 */
+    flex-direction: row-reverse; /* 新增这一行，即可左右互换 */
+}
+
+.lab-text {
+    flex: 4; 
+    text-align: center;
+}
+
+.lab-text h2 {
+    margin-top: 0; /* 移除标题的默认上边距 */
+    border-bottom: none; /* 在这里我们不需要标题下划线 */
+    padding-bottom: 5px;
+    font-size: 1.5em;
+}
+
+.lab-text p {
+    margin-bottom: 0;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0.9;
 }
 
 .lab-logo-container {
-    margin-top: 15px;
+    flex: 1.3;
+    text-align: center; 
 }
 
 .lab-logo {
-    max-width: 200px;
-    max-height: 80px;
-    filter: grayscale(50%);
-    opacity: 0.8;
-    transition: filter 0.3s, opacity 0.3s;
-}
-.lab-logo:hover {
-    filter: grayscale(0%);
+    max-width: 100%; /* Logo 最大宽度为其容器宽度 */
+    height: auto; /* 高度自动缩放以保持比例 */
+    max-height: 250px; /* 限制一个最大高度 */
+    object-fit: contain;
     opacity: 1;
 }
+
 
 /* Publications */
 #publications-list {
