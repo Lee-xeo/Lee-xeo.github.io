@@ -12,7 +12,7 @@
             {
                 "title": "MVU-Eval: Towards Multi-Video Understanding Evaluation for Multimodal LLMs",
                 "authors": "Tianhao Peng*, Haochen Wang*, Yuanxing Zhang*, Zekun Moore Wang, Zili Wang, Ge Zhang, Jian Yang, **Shihao Li**, Yanghai Wang, Jiaheng Liu† et al. (6 additional authors not shown)",
-                "venue": "NeurIPS 2025",
+                "venue": "Submitted",
                 "links": {
                     "论文": "https://openreview.net/forum?id=UZD5CQV6f9",
                     "code": "https://huggingface.co/datasets/MVU-Eval-Team/MVU-Eval-Data"
@@ -21,7 +21,7 @@
             {
                 "title": "OmniBench: Towards The Future of Universal Omni-Language Models",
                 "authors": "Yizhi LI*, Ge Zhang*†, Yinghao Ma*, Ruibin Yuan, King Zhu, Hangyu Guo, Yiming Liang, Jiaheng Liu, Zekun Moore Wang, Jian Yang, Yanghai Wang, **Shihao Li**, Chenghua Lin† et al. (10 additional authors not shown)",
-                "venue": "NeurIPS 2025",
+                "venue": "Submitted",
                 "links": {
                     "paper": "https://openreview.net/forum?id=Rc8z5wLzBF",
                     "code": "https://anonymous.4open.science/r/Omni-Bench-EA9B"
@@ -42,7 +42,7 @@
             {
                 "title": "MVU-Eval：迈向多模态 LLM 的多视频理解评估",
                 "authors": "Tianhao Peng*, Haochen Wang*, Yuanxing Zhang*, Zekun Moore Wang, Zili Wang, Ge Zhang, Jian Yang, **Shihao Li**, Yanghai Wang, Jiaheng Liu† et al. (6 additional authors not shown)",
-                "venue": "NeurIPS 2025",
+                "venue": "Submitted",
                 "links": {
                     "论文": "https://openreview.net/forum?id=UZD5CQV6f9",
                     "code": "https://huggingface.co/datasets/MVU-Eval-Team/MVU-Eval-Data"
@@ -51,7 +51,7 @@
             {
                 "title": "OmniBench：迈向通用全语种模型的未来新方法",
                 "authors": "Yizhi LI*, Ge Zhang*†, Yinghao Ma*, Ruibin Yuan, King Zhu, Hangyu Guo, Yiming Liang, Jiaheng Liu, Zekun Moore Wang, Jian Yang, Yanghai Wang, **Shihao Li**, Chenghua Lin† et al. (10 additional authors not shown)",
-                "venue": "NeurIPS 2025",
+                "venue": "Submitted",
                 "links": {
                     "论文": "https://openreview.net/forum?id=Rc8z5wLzBF",
                     "code": "https://anonymous.4open.science/r/Omni-Bench-EA9B"
