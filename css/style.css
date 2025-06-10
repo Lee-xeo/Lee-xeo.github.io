@@ -306,3 +306,44 @@ footer {
         right: 10px;
     }
 }
+
+/* ==========================================================================
+   Responsive Design - Media Queries
+   ========================================================================== */
+
+/* 当屏幕宽度小于等于 768px 时 (典型的平板电脑和手机) */
+@media (max-width: 768px) {
+
+    /* --- 调整实验室板块布局 --- */
+    .lab-content {
+        /* 核心改动：将主轴方向从横向 (row) 变为纵向 (column) */
+        flex-direction: column;
+        gap: 20px; /* 调整垂直方向的间距 */
+    }
+
+    .lab-text,
+    .lab-logo-container {
+        /* 在垂直布局下，让文字和Logo都居中显示，更美观 */
+        text-align: center;
+    }
+
+    .lab-text {
+        /* 确保文字和Logo之间有明确的间距 */
+        margin-bottom: 20px;
+    }
+
+    /* --- 也可以顺便优化一下顶部的个人信息区 --- */
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center; /* 让社交图标也居中 */
+        margin-top: 15px;
+    }
+
+    .location-item span[data-lang-key="location"] {
+        font-size: 0.6em; /* 在手机上可以稍微调大一点点地址文字 */
+    }
+}
