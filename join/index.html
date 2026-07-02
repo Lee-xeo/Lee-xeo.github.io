@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>一封信 — 写给愿意多走一步的你</title>
+<meta name="description" content="一封写给同频人的信：我们是谁、为什么是 AI 教育、期待什么样的人。南京大学 LINK 实验室孵化的初创团队。" />
+<style>
+:root{
+  --bg:#faf7f2;--bg-2:#f2ede4;--surface:#fffdfa;--surface-2:#f6f1e9;
+  --border:rgba(64,50,36,.13);--border-strong:rgba(64,50,36,.22);
+  --text:#2b2622;--muted:#6f665c;--muted-2:#9b9286;
+  --clay:#c15f3c;--clay-2:#a64a2c;--clay-bright:#d97757;--clay-soft:#f4e7df;
+  --gold:#bd8b3a;--gold-soft:rgba(189,139,58,.10);
+  --serif:"Songti SC","STSong","Noto Serif SC",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  --maxw:1000px;--topbar-h:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(1100px 620px at 80% -12%,rgba(217,119,87,.10),transparent 62%),
+  radial-gradient(900px 560px at 4% 2%,rgba(189,139,58,.07),transparent 58%),
+  linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;width:100%}
+.page-main{padding-top:calc(var(--topbar-h) + 52px);padding-bottom:80px}
+@media(max-width:640px){.page-main{padding-top:calc(var(--topbar-h) + 32px)}}
+
+/* one chapter at a time */
+.chapter{display:none}
+.chapter.active{display:flex;flex-direction:column;min-height:100vh}
+.chapter.active > .wrap{margin:auto}
+
+/* type */
+h1.title{font-family:var(--serif);font-size:clamp(33px,5vw,54px);line-height:1.14;letter-spacing:-.01em;font-weight:700;margin-bottom:22px}
+h2.title{font-family:var(--serif);font-size:clamp(26px,3.9vw,40px);line-height:1.2;letter-spacing:-.01em;font-weight:700;margin-bottom:16px}
+h3.sub{font-family:var(--serif);font-size:clamp(20px,2.6vw,26px);font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.lede{color:var(--muted);font-size:clamp(15px,1.7vw,18px);max-width:66ch}
+.lede b{color:var(--text);font-weight:650}
+.accent{color:var(--clay)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--clay);
+  display:inline-flex;align-items:center;gap:9px;margin-bottom:18px;text-transform:uppercase}
+.eyebrow::before{content:"";width:24px;height:1px;background:var(--clay);opacity:.65}
+.link{color:var(--clay);text-decoration:none;border-bottom:1px solid rgba(193,95,60,.4);transition:color .2s,border-color .2s}
+.link:hover{color:var(--clay-2);border-color:var(--clay-2)}
+.badge{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+  color:var(--clay);background:var(--clay-soft);border:1px solid var(--border-strong);
+  padding:7px 14px;border-radius:999px;margin-bottom:24px}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--clay-bright);box-shadow:0 0 9px rgba(217,119,87,.7);animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.meta-row{display:flex;gap:10px 22px;flex-wrap:wrap;font-size:13.5px;color:var(--muted-2);font-family:var(--mono);margin-top:26px}
+.meta-row span{display:inline-flex;align-items:center;gap:7px}
+.meta-row span::before{content:"◆";color:var(--clay-bright);font-size:9px}
+
+/* beat */
+.beat{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
+.beat .k{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--clay);line-height:1;padding-top:2px}
+.beat p{color:var(--muted);font-size:16px;max-width:64ch}
+.beat p b{color:var(--text);font-weight:650}
+.beat-split{display:flex;gap:26px;align-items:flex-start}
+.beat-split .beat-txt{flex:1;min-width:0;max-width:400px}
+.story{margin-top:36px;display:flex;flex-direction:column;gap:34px}
+@media(max-width:640px){.beat-split{flex-direction:column;gap:16px}}
+@media(max-width:560px){.beat{grid-template-columns:1fr;gap:8px}.beat .k{font-size:22px}}
+
+.quote{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--clay-bright);
+  border-radius:12px;padding:20px 24px;margin-top:16px;box-shadow:0 1px 3px rgba(70,50,30,.05);max-width:64ch}
+.quote p{color:var(--text);font-size:16px;line-height:1.75}
+.quote .src{font-family:var(--mono);font-size:12.5px;color:var(--muted-2);margin-top:10px}
+
+/* screenshots */
+.shot{margin-top:22px;border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  box-shadow:0 6px 22px rgba(80,55,30,.12);cursor:zoom-in;transition:transform .25s,box-shadow .25s;background:var(--surface)}
+.shot:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(80,55,30,.2)}
+.shot img{display:block;width:100%;height:auto}
+.shot.static{cursor:default}.shot.static:hover{transform:none;box-shadow:0 6px 22px rgba(80,55,30,.12)}
+.shot-cap{font-family:var(--mono);font-size:12px;color:var(--muted-2);margin-top:9px;display:flex;align-items:center;gap:6px}
+.shot-github{max-width:600px}
+.shot-policy{width:210px;flex:0 0 auto}
+
+/* people */
+.person{display:flex;gap:22px;align-items:flex-start;margin-top:26px}
+.avatar{flex:0 0 auto;width:74px;height:74px;border-radius:16px;overflow:hidden;
+  box-shadow:0 4px 16px rgba(80,55,30,.18);border:1px solid var(--border)}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.fname{font-size:19px;font-weight:750}
+.frole{color:var(--muted-2);font-weight:500;font-family:var(--mono);font-size:13px;margin-left:6px}
+.fmeta{color:var(--muted-2);font-size:13px;margin-top:5px;line-height:1.55}
+.person .mono{color:var(--muted);font-size:15.5px;margin-top:14px;line-height:1.78}
+.person .mono b{color:var(--text);font-weight:650}
+.mono-list{list-style:none;counter-reset:ml;margin:14px 0 0;padding:0;color:var(--muted);font-size:15.5px;line-height:1.78}
+.mono-list li{counter-increment:ml;position:relative;padding-left:34px;margin-top:12px}
+.mono-list li::before{content:counter(ml);position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:7px;
+  background:var(--clay-soft);color:var(--clay);border:1px solid var(--border);
+  font-family:var(--mono);font-size:12px;font-weight:700;display:grid;place-items:center;line-height:1}
+.mono-list li b{color:var(--text);font-weight:650}
+.team-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.team-chips span{font-size:13.5px;color:var(--text);background:var(--surface-2);border:1px solid var(--border);
+  padding:6px 13px;border-radius:999px;font-family:var(--mono)}
+@media(max-width:520px){.person{flex-direction:column;gap:14px}}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;
+  transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden;
+  box-shadow:0 1px 3px rgba(70,50,30,.05)}
+.card:hover{transform:translateY(-3px);border-color:var(--border-strong);box-shadow:0 14px 36px rgba(80,55,30,.10)}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+@media(max-width:760px){.pillars{grid-template-columns:1fr}}
+.pillar{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:0 1px 3px rgba(70,50,30,.05)}
+.pillar .n{font-family:var(--mono);font-size:12px;color:var(--clay)}
+.pillar h4{font-size:17px;font-weight:700;margin:8px 0 6px}
+.pillar p{color:var(--muted);font-size:14px}
+
+/* 刘老师聊天拼图墙 */
+.chat-note{font-family:var(--mono);font-size:12.5px;color:var(--muted-2);margin-top:18px;display:block}
+.chat-wall{margin-top:16px;display:flex;flex-wrap:nowrap;gap:10px;align-items:center;overflow-x:auto;padding:8px 2px 10px;scrollbar-width:thin}
+.clip{flex:0 0 auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;
+  box-shadow:0 6px 18px rgba(80,55,30,.15);cursor:zoom-in;transition:transform .22s,box-shadow .22s;
+  transform:rotate(var(--rot,0deg)) translateY(var(--ty,0))}
+.clip img{display:block;height:48px;width:auto}
+.clip:hover{transform:rotate(0deg) translateY(0) scale(1.08);box-shadow:0 14px 32px rgba(80,55,30,.26);z-index:3;position:relative}
+.chat-wall .clip:nth-child(1){--rot:-4deg;--ty:2px}
+.chat-wall .clip:nth-child(2){--rot:3deg;--ty:-6px}
+.chat-wall .clip:nth-child(3){--rot:-2.5deg;--ty:5px}
+.chat-wall .clip:nth-child(4){--rot:4.5deg;--ty:-4px}
+.chat-wall .clip:nth-child(5){--rot:-3.5deg;--ty:6px}
+.chat-wall .clip:nth-child(6){--rot:2.5deg;--ty:-5px}
+@media(max-width:520px){.clip img{height:42px}}
+
+/* flip cards */
+.flip-deck{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:32px}
+@media(max-width:680px){.flip-deck{grid-template-columns:1fr}}
+.flip-card{perspective:1000px;cursor:pointer;height:230px}
+.flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .52s cubic-bezier(.4,.2,.2,1)}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:16px;padding:26px;display:flex;flex-direction:column;justify-content:space-between}
+.flip-back{background:var(--clay-soft);border:1px solid var(--border-strong);transform:rotateY(180deg)}
+.flip-front{padding-top:48px}
+.flip-card.full .flip-front{background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--clay);box-shadow:0 1px 3px rgba(70,50,30,.05)}
+.flip-card.full:hover .flip-front{border-color:var(--border-strong);border-left-color:var(--clay);box-shadow:0 8px 24px rgba(80,55,30,.10)}
+.flip-card.part .flip-front{background:var(--surface-2);border:1px solid var(--border);
+  border-left:3px solid var(--gold);box-shadow:0 1px 3px rgba(70,50,30,.05)}
+.flip-card.part:hover .flip-front{border-color:var(--border-strong);border-left-color:var(--gold);box-shadow:0 8px 24px rgba(80,55,30,.10)}
+.card-tag{position:absolute;top:14px;left:16px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.07em;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase}
+.card-tag.full{background:var(--clay-soft);color:var(--clay);border:1px solid rgba(193,95,60,.3)}
+.card-tag.part{background:var(--gold-soft);color:var(--gold);border:1px solid rgba(189,139,58,.35)}
+.flip-head{display:flex;align-items:center;margin-bottom:8px}
+.flip-sub{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted-2);flex-shrink:0}
+.flip-sub::before{content:"·";margin:0 9px;color:var(--muted-2)}
+.flip-front h3{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--text);margin-bottom:0}
+.flip-front p{color:var(--muted);font-size:14px;line-height:1.65;flex:1}
+.flip-front ul{font-size:14px;line-height:1.65;color:var(--muted);padding-left:16px;list-style:disc}
+.flip-hint{font-family:var(--mono);font-size:11.5px;color:var(--muted-2);margin-top:12px}
+.flip-back h4{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--clay-2);margin-bottom:12px}
+.flip-back ul{list-style:none;padding:0;margin:0;flex:1}
+.flip-back ul li{font-size:14px;color:var(--muted);line-height:1.65;padding-left:14px;position:relative;margin-top:6px}
+.flip-back ul li::before{content:"·";position:absolute;left:0;color:var(--clay)}
+.flip-back ul li b{color:var(--text);font-weight:650}
+.flip-back .flip-hint{color:var(--clay-2)}
+
+/* note list */
+.note-list{margin-top:20px;color:var(--muted);font-size:14.5px;line-height:1.75;padding-left:18px;list-style:disc}
+.note-list li{margin-top:8px}
+.note-list li b{color:var(--text);font-weight:650}
+
+/* payline / cta */
+.payline{margin-top:16px;background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:12px;
+  padding:18px 22px;color:var(--muted);font-size:15.5px;line-height:1.75}
+.payline b{color:var(--text);font-weight:650}
+.cta{background:linear-gradient(135deg,var(--clay-soft),rgba(189,139,58,.10));
+  border:1px solid var(--border-strong);border-radius:22px;padding:54px 40px;text-align:center;position:relative;overflow:hidden}
+.cta h2{font-family:var(--serif);font-size:clamp(25px,4.2vw,38px);font-weight:700;letter-spacing:-.01em;margin-bottom:16px}
+.cta p{color:var(--muted);font-size:17px;max-width:58ch;margin:0 auto;line-height:1.75}
+.cta p+p{margin-top:12px}
+.cta p b{color:var(--text)}
+.cta small{display:block;margin-top:24px;color:var(--muted-2);font-size:13.5px;font-family:var(--mono)}
+.end-foot{margin-top:32px;text-align:center;color:var(--muted-2);font-size:13px;font-family:var(--mono)}
+
+/* topbar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 26px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  background:rgba(250,247,242,.8);border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;letter-spacing:.01em;line-height:1.15;flex-shrink:0}
+.mark{width:27px;height:27px;flex-shrink:0;border-radius:8px;background:var(--clay);display:grid;place-items:center;
+  font-family:var(--serif);font-weight:700;font-size:15px;color:#fff;box-shadow:0 3px 12px rgba(193,95,60,.4)}
+.brand small{color:var(--muted-2);font-weight:500}
+/* 章节跳转按钮 */
+.dots{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.dot-btn{font-family:var(--mono);font-size:12px;color:var(--muted-2);background:var(--surface);border:1px solid var(--border);
+  border-radius:999px;padding:6px 11px;cursor:pointer;line-height:1;
+  transition:color .2s,background .2s,border-color .2s,box-shadow .2s}
+.dot-btn:hover{color:var(--text);border-color:var(--border-strong)}
+.dot-btn.on{color:#fff;background:var(--clay);border-color:transparent;box-shadow:0 3px 12px rgba(193,95,60,.32)}
+@media(max-width:640px){.topbar{padding:0 12px;gap:10px}.brand small{display:none}.brand .bl{display:none}
+  .dots{gap:5px}.dot-btn{padding:5px 8px;font-size:11px}}
+
+/* progress bar */
+.progress{position:fixed;top:var(--topbar-h);left:0;right:0;height:3px;background:rgba(64,50,36,.08);z-index:59}
+.progress>i{display:block;height:100%;width:0;background:var(--clay-bright);transition:width .4s cubic-bezier(.4,.2,.2,1)}
+
+/* chapter nav */
+.chapter-next{margin-top:72px;padding-top:32px;border-top:1px solid var(--border);text-align:center}
+.next-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;
+  letter-spacing:.04em;color:var(--clay);text-decoration:none;background:transparent;cursor:pointer;
+  border:1px solid rgba(193,95,60,.35);border-radius:999px;padding:9px 20px;
+  transition:background .2s,border-color .2s,transform .18s}
+.next-btn:hover{background:var(--clay-soft);border-color:var(--clay);transform:translateY(-1px)}
+.back-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;
+  background:transparent;border:1px solid var(--border);border-radius:16px;padding:18px 28px;
+  text-decoration:none;color:var(--muted-2);font-family:var(--mono);font-size:13px;cursor:pointer;
+  transition:color .2s,border-color .2s}
+.back-btn:hover{color:var(--clay);border-color:var(--clay)}
+
+/* lightbox */
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(43,34,26,.86);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;padding:28px;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:min(94vw,900px);max-height:90vh;border-radius:10px;box-shadow:0 30px 90px rgba(0,0,0,.5)}
+.lightbox .hint{position:absolute;bottom:20px;left:0;right:0;text-align:center;
+  color:rgba(255,255,255,.75);font-family:var(--mono);font-size:12.5px}
+
+/* reveal */
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+[data-reveal].in{opacity:1;transform:none}
+[data-reveal][data-d="1"]{transition-delay:.08s}
+[data-reveal][data-d="2"]{transition-delay:.16s}
+[data-reveal][data-d="3"]{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}[data-reveal]{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="mark">L</span>
+    <span>NJU&#8209;LINK LAB<br class="bl"><small>南京大学 · AI 教育团队</small></span>
+  </div>
+  <nav class="dots" id="dots" aria-label="章节导航">
+    <button class="dot-btn on" data-goto="0" title="开头 · 一封信">01</button>
+    <button class="dot-btn" data-goto="1" title="我们是谁">02</button>
+    <button class="dot-btn" data-goto="2" title="我们在做一件什么事">03</button>
+    <button class="dot-btn" data-goto="3" title="为什么是 AI 教育">04</button>
+    <button class="dot-btn" data-goto="4" title="人才画像">05</button>
+    <button class="dot-btn" data-goto="5" title="最后一页">06</button>
+  </nav>
+</header>
+<div class="progress"><i id="progressBar"></i></div>
+
+<main>
+
+  <!-- ① 开头 · 一封信 -->
+  <section class="chapter page-main active">
+    <div class="wrap">
+      <div class="badge" data-reveal><span class="dot"></span>一封信 · 写在最前</div>
+      <h1 class="title" data-reveal data-d="1">谢谢你，<span class="accent">愿意多走这一步</span></h1>
+      <p class="lede" data-reveal data-d="1">你是先看到了那张海报，又主动找了过来，才走到这封信面前的。在这个人人都被信息推着走的时代，<b>愿意为一件还看不清全貌的事多迈一步</b>，本身就很难得。所以，先说一声谢谢。</p>
+
+      <div class="beat" style="margin-top:34px" data-reveal data-d="2">
+        <figure class="shot" style="width:170px;margin-top:0" onclick="return false">
+          <a href="assets/poster-large.jpg" data-lightbox aria-label="点开查看海报大图" style="display:block">
+            <img src="assets/poster-thumb.jpg" alt="招募海报缩略图" loading="lazy" width="900" />
+          </a>
+        </figure>
+        <div>
+          <p style="color:var(--muted);font-size:16px">那张招人广告是贴在公开平台上的。出于各种原因，上面的信息被<b style="color:var(--text)">特意删减</b>，只做初步的画像定位。</p>
+          <p style="color:var(--muted);font-size:16px;margin-top:12px">各位读到这封信的都是初步满足我们期待的具有充足潜力的人才，我想把招人广告上隐藏掉的，更完整的样子讲给你听：<b style="color:var(--text)">
+            <ul>
+              <li>我们是谁</li>
+              <li>我们在做什么</li>
+              <li>为什么是现在</li>
+              <li>我们究竟在找什么样的人。</li>
+            </ul></b>
+          读完之后，可能你会觉得和你的预期不符，可能你会获得出乎意外的惊喜，但最后选择权都在你手里。</p>
+        </div>
+      </div>
+
+      <p class="lede" style="margin-top:26px" data-reveal data-d="3">这不是一份招聘启事，是一封信。让你了解更多的全貌，然后做出适合自己的选择。</p>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="1">往下读 · 我们是谁 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 我们是谁 -->
+  <section class="chapter page-main">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>我们是谁</div>
+      <h2 class="title" data-reveal data-d="1">先认识<span class="accent">两个人</span></h2>
+      <p class="lede" data-reveal data-d="1">我们老板和我自己。</p>
+
+      <!-- 导师 -->
+      <div class="person card" data-reveal data-d="2" style="overflow:visible;margin-top:32px">
+        <div class="avatar"><img src="assets/avatar-liu.jpg" alt="刘佳恒老师" loading="lazy" /></div>
+        <div>
+          <div class="fname">刘佳恒<span class="frole">· 老板 / 幕后白手</span></div>
+          <div class="fmeta">南京大学助理教授、博士生导师 · 阿里星 · 开源大模型组织 M&#8209;A&#8209;P 创始成员之一</div>
+          <p class="mono">官网能查到的官话就不介绍了，其实就是很会水 paper（bushi）。年纪轻没架子，人品好，业内人脉比较广人缘很好，对学生也真的很好，以后有机会多接触就知道了。</p>
+          <span class="chat-note">顺便，这是他平时在群里的样子 —— 你大概能感觉出，是个什么样的人 👇</span>
+          <div class="chat-wall">
+            <a class="clip" href="assets/liu-chat-1.jpg" data-lightbox aria-label="刘老师聊天截图"><img src="assets/liu-chat-1.jpg" alt="刘老师聊天：稳了" loading="lazy" /></a>
+            <a class="clip" href="assets/liu-chat-2.jpg" data-lightbox aria-label="刘老师聊天截图"><img src="assets/liu-chat-2.jpg" alt="刘老师聊天：牛逼" loading="lazy" /></a>
+            <a class="clip" href="assets/liu-chat-3.jpg" data-lightbox aria-label="刘老师聊天截图"><img src="assets/liu-chat-3.jpg" alt="刘老师聊天：这不就是渣男吗" loading="lazy" /></a>
+            <a class="clip" href="assets/liu-chat-4.jpg" data-lightbox aria-label="刘老师聊天截图"><img src="assets/liu-chat-4.jpg" alt="刘老师聊天：我是不是要混不下去了" loading="lazy" /></a>
+            <a class="clip" href="assets/liu-chat-5.jpg" data-lightbox aria-label="刘老师聊天截图"><img src="assets/liu-chat-5.jpg" alt="刘老师聊天：搞不定" loading="lazy" /></a>
+            <a class="clip" href="assets/liu-chat-6.jpg" data-lightbox aria-label="刘老师聊天截图"><img src="assets/liu-chat-6.jpg" alt="刘老师聊天：我这 i 人" loading="lazy" /></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 我 -->
+      <div class="person card" data-reveal data-d="2" style="margin-top:20px">
+        <div class="avatar"><img src="assets/avatar-shihao.jpg" alt="李世昊" loading="lazy" /></div>
+        <div>
+          <div class="fname">李世昊<span class="frole">· 团队领队 / 项目负责人</span></div>
+          <div class="fmeta">南京大学智科研一 · 可灵 AI 实习生</div>
+          <p class="mono">过去的一年，我一直在做大模型本身的事 —— <b>评测、合成数据、后训练</b>，离模型能力的边界很近。在可灵做了一年 Research 之后，我有如下几个想法：</p>
+          <ol class="mono-list">
+            <li>在职体验的判断：眼下最吃香的岗位是基模，但它会逐渐缩量/提纯；而且这个岗位本身也<b>不适合大多数人</b>。</li>
+            <li>对发展的预期：基模之所以缩量，本质上是因为<b>基模能力的快速增长期正在过去</b>；与之相对，<b>AI 应用的蓝海才刚刚到来</b>。</li>
+            <li>个人小心思：比起搞科研，<b>我更喜欢做开发</b>。</li>
+          </ol>
+          <figure class="shot shot-github" data-reveal>
+            <a href="assets/github-contrib.png" data-lightbox aria-label="点开查看 GitHub 贡献图" style="display:block">
+              <img src="assets/github-contrib.png" alt="GitHub 过去一年 617 次提交" loading="lazy" width="1400" />
+            </a>
+          </figure>
+          <div class="shot-cap">☝️ Vibe Coding 方面，自从 25 年以来就没手写过代码（除了老古董机试环节）<span aria-hidden="true">⤢</span></div>
+        </div>
+      </div>
+
+      <!-- 团队其他成员 -->
+      <div class="card" data-reveal data-d="2" style="margin-top:20px">
+        <div class="fname">还有一群人<span class="frole">· 团队其他成员</span></div>
+        <p style="margin-top:12px">目前团队其余成员都一样由<b>本科生和研究生</b>组成，以<b>兼职</b>为主 —— 涵盖算法研究员、前后端开发工程师、产品经理。分工各异，但大家的共性只有一个：</p>
+        <p style="margin-top:10px"><b>对我们正在做的这件事，抱有充足的兴趣和热情。</b></p>
+        <div class="team-chips">
+          <span>算法研究员</span>
+          <span>前 / 后端开发工程师</span>
+          <span>产品经理</span>
+        </div>
+      </div>
+
+      <!-- 团队文化 -->
+      <h3 class="sub" data-reveal style="margin-top:44px">我们的团队文化</h3>
+      <div class="pillars">
+        <div class="pillar" data-reveal data-d="1"><div class="n">01</div><h4>扁平，没有层级</h4><p>大家的目标是一致的，分工合作着干。</p></div>
+        <div class="pillar" data-reveal data-d="2"><div class="n">02</div><h4>支柱型人才</h4><p>每个人都在自己擅长的方向上能独当一面、有所建树。</p></div>
+        <div class="pillar" data-reveal data-d="3"><div class="n">03</div><h4>平等，彼此学习</h4><p>大家是相互学习的合作关系，不存在绝对的谁比谁更牛，三人行必有我师。</p></div>
+      </div>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="2">往下读 · 我们在做一件什么事 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ 我们在做一件什么事 -->
+  <section class="chapter page-main">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>我们在做一件什么事</div>
+      <h2 class="title" data-reveal data-d="1">我们到底在干啥 —— <span class="accent">我们在创业</span></h2>
+      <p class="lede" data-reveal data-d="1">不适合放在公共平台招人广告上的事，就是咱们其实是一个初创团队，正在推进 <b>「AI 教育」</b>方向的创业项目落地。我知道这可能有点突然，但是不着急听我慢慢讲。</p>
+      <p class="lede" style="margin-top:14px" data-reveal data-d="2">接下来我们抱着极大的诚意，初步介绍一下我们的路线和项目背景，但是出于保密原则，还请您<b>不要随意转发、传播和在公共平台上讨论，非常感谢！</b>如果觉得身边有认识的贤才大能符合我们在寻找的画像，欢迎举荐！</p>
+
+      <div class="pillars">
+        <div class="pillar" data-reveal data-d="1">
+          <div class="n">身份</div>
+          <h4>一支创业团队</h4>
+          <p>从实验室里长出来，但奔着做产品、做公司去 —— 不是发完论文就散场。</p>
+        </div>
+        <div class="pillar" data-reveal data-d="2">
+          <div class="n">目标</div>
+          <h4>孵化出一家公司</h4>
+          <p>把手里的项目一步步做成真正能立住的事业，这是我们清晰的路线。</p>
+        </div>
+        <div class="pillar" data-reveal data-d="3">
+          <div class="n">方向</div>
+          <h4>AI 教育</h4>
+          <p>方向已经选定。至于凭什么是它，下一页跟你解释。</p>
+        </div>
+      </div>
+
+      <p class="lede" style="margin-top:30px" data-reveal>至于<b>为什么偏偏押注「AI 教育」、这条路凭什么走得通</b> —— 那正是下一页要跟你一条条讲清楚的事。</p>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="3">往下读 · 为什么是 AI 教育 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 为什么是 AI 教育 -->
+  <section class="chapter page-main">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>为什么是 AI 教育</div>
+      <h2 class="title" data-reveal data-d="1">分享一下我们的看法，<span class="accent">希望可以说动你</span></h2>
+      <p class="lede" data-reveal data-d="1">接下来这一页，是我最想跟你讲清楚的。请多花两分钟 —— 值不值得一起赌，重点都在这里。</p>
+
+      <div class="story">
+        <!-- 1 政策 -->
+        <div class="beat" data-reveal>
+          <div class="k">B 端市场</div>
+          <div class="beat-split">
+            <div class="beat-txt">
+              <h3 class="sub">这是国家级的确定性方向</h3>
+              <p>「人工智能 + 教育」不是风口炒作，是写进教育部战略的事 —— 《教育强国建设规划纲要（2024–2035）》、人工智能赋能教育行动试点，一路加码。<b>江苏正是首批承担试点的省份之一。</b></p>
+              <p>有政策在上面树立大旗，意味着 To B 这条线，有真实、持续、愿意买单的一方（各大高校乃至中小学，都需要有成熟的外包团队来负责承担 AI 赋能教育的政治任务）。</p>
+              <p><b>因此我们最坏的情况也可以是一个 B 端外包公司。</b></p>
+            </div>
+            <figure class="shot shot-policy static">
+              <img src="assets/policy-doc.jpg" alt="江苏省人工智能赋能教育行动试点通知" loading="lazy" width="1500" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- 2 C端 -->
+        <div class="beat" data-reveal>
+          <div class="k">C 端市场</div>
+          <div>
+            <h3 class="sub">一个巨大的，等待被革命的市场</h3>
+            <p>如果说 B 端是政策导向的稳，C 端就是消费者需求的前沿。</p>
+            <p><b>我们都是学生，最懂学习的壁垒在哪</b> —— 这恰恰是最贴近、最高频的真实需求。当基座模型强到今天这个程度，把「学习」这件事彻底重做一遍，是一个巨大且带有革命性的机会。这不是修修补补，而是提出一个全新的，具有革命性的解决方案。<b>传统教培行业无法自我革命，而新兴大模型技术行业尚无暇估计此处，这个时刻正是我们的机遇。</b></p>
+            <p> 我们的 C 端业务剑指整个传统教辅行业（辅导班，考研，考公，法考，雅思...）。</p>
+          </div>
+        </div>
+
+        <!-- 3 信心 -->
+        <div class="beat" data-reveal>
+          <div class="k">理想主义</div>
+          <div>
+            <h3 class="sub">再谈点高大上的理想信念</h3>
+            <p>其实 AI 教育这件事的动力源泉，除了对市场的判断以外，更重要也是更源头的出发点，还是建立我们在对教育本质的深刻理解和对未来的美好愿景之上。</p>
+            <p>我们真诚地希望 AI 的强大能力能够真正服务于教育，让每个学生都能享受到个性化的学习体验。我曾多次听闻一个一样的故事："AI 是一个有无限耐心且能被低成本复制、共享、一对一的理想老师。"</p>
+            <p>我们认为 AI 教育是实现<b>"让偏远山区和城市中心的孩子享有平等的教学资源"</b>这个目标的可行方案。</p>
+          </div>
+        </div>
+
+        <!-- 4 顾虑 + 先例 -->
+        <div class="beat" data-reveal>
+          <div class="k">同行者</div>
+          <div>
+            <h3 class="sub">我们并不是实验室的第一支创业团队，也不会是最后一支</h3>
+            <p>在今年刚开始的时候，老板就让我带一支创业团队搞 AI 网文生成，由于本人实在不懂怎么写网文，之后就把团队和业务交给了专业人士（对领域的兴趣永远是创造第一原动力），目前正如火如荼推进中。同时未来可预见的实验室内也有更多其他领域的创业团队正在酝酿。</p>
+            <div class="quote">
+              <p>网文创业团队目前的核心骨干成员，有一位就是南大智科今年毕业的大四同学。一开始，他只是把它当<b>毕业设计+实习</b>跟着做；做着做着，到毕业时，他<b>放弃了科大讯飞 40 万的 offer</b>，全职留下来一起干。其实核心理由很简单——他喜欢做、想做 AI 网文生成。</p>
+              <div class="src">—— 我不是说你也该这样。只是想让你知道：这条路，不是没有人走通过。</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 台阶 -->
+        <div class="beat" data-reveal>
+          <div class="k">更多信息</div>
+          <div>
+            <h3 class="sub">向有兴趣深入了解的同好开放</h3>
+            <p>请理解我们不得不仍然保留更多的内部信息，这些信息向有兴趣深入参与创业团队的同学开放。我们初步介绍完了自己，下一页需要大家对自身做判断。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="4">往下读 · 人才画像 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ 人才画像 -->
+  <section class="chapter page-main">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>人才画像</div>
+      <h2 class="title" data-reveal data-d="1">我们在找<span class="accent">四种人</span></h2>
+      <p class="lede" data-reveal data-d="1">每张卡对应一种画像。<b>点击翻面</b>看具体期望。</p>
+
+      <div class="flip-deck" data-reveal data-d="2">
+
+        <!-- 全职①：合伙人 -->
+        <div class="flip-card full" tabindex="0" aria-label="潜在创业合伙人，点击查看详情">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div>
+                <div class="flip-head">
+                  <h3>潜在创业合伙人</h3>
+                  <span class="flip-sub">可遇不可求</span>
+                </div>
+                <ul>
+                  <li>觉得「AI + 教育」对上你频率了，且对创业持开放态度。</li>
+                  <li>不必当下就决定入伙，但暑期合作满意的话，有<b>大概率可能上车</b>。</li>
+                  <li>我们欢迎你加入核心团队，请翻开这里。</li>
+                </ul>
+              </div>
+              <div class="flip-hint">点击翻面 →</div>
+              <span class="card-tag full">全职</span>
+            </div>
+            <div class="flip-back">
+              <h4>适合自信且有抱负，大胆的你</h4>
+              <ul>
+                <li><b>领域理念</b>：对 AI 教育产品有自己的判断，不只是执行者</li>
+                <li><b>技术过硬</b>：有完整的独立承担上线产品开发的能力</li>
+                <li><b>臭味相投</b>：认同我们的团队文化，善于沟通和合作</li>
+                <li><b>个人规划</b>：未来至少半年内可基本全职参与，更适合无升学规划的准毕业生</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 全职②：开发大佬 -->
+        <div class="flip-card full" tabindex="0" aria-label="暑期全职实习生，点击查看详情">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div>
+                <div class="flip-head">
+                  <h3>开发大佬</h3>
+                  <span class="flip-sub">招人广告的目标画像</span>
+                </div>
+                <ul>
+                  <li>对创业没啥想法，或者准备先稳一手。</li>
+                  <li>愿意把 AI 教育平台当做自己的一个暑期项目。</li>
+                  <li>可以带走一份<b>绝对能打的真实项目履历</b>，请翻开这里。</li>
+                </ul>
+              </div>
+              <div class="flip-hint">点击翻面 →</div>
+              <span class="card-tag full">全职</span>
+            </div>
+            <div class="flip-back">
+              <h4>稳中求进的理想岗位</h4>
+              <ul>
+                <li><b>独立开发</b>：能在较少指导下独立推进平台的开发和上线</li>
+                <li><b>工程经验</b>：有完整的工程或产品交付经验，不只停留在学校项目</li>
+                <li><b>时间投入</b>：暑期能基本全职投入，目标清晰</li>
+                <li><b>长期潜力</b>：有意愿后续深入合作，对未来规划保持开放</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 兼职①：参与型 -->
+        <div class="flip-card part" tabindex="0" aria-label="兼职参与者，点击查看详情">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div>
+                <div class="flip-head">
+                  <h3>有兴趣的兼职 / 实习</h3>
+                  <span class="flip-sub">协作参与</span>
+                </div>
+                <ul>
+                  <li>对项目有兴趣，目前还不具备独立开发上线水准产品的能力。</li>
+                  <li>想参与硬核业务项目，给履历添彩。</li>
+                  <li>期待以<b>协作方式参与</b>项目，边做边成长。</li>
+                </ul>
+              </div>
+              <div class="flip-hint">点击翻面 →</div>
+              <span class="card-tag part">兼职</span>
+            </div>
+            <div class="flip-back">
+              <h4>以培养为主的学习型岗位</h4>
+              <ul>
+                <li><b>兴趣驱动</b>：对 AI 教育有真实的兴趣，愿意花时间深入了解</li>
+                <li><b>成长潜力</b>：在某个具体方向上有一定基础，正在快速成长</li>
+                <li><b>灵活合作</b>：能接受以<b>项目产出计酬</b>，而非固定排班</li>
+                <li><b>起点心态</b>：把这里当作积累经验、建立连接的起点</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 兼职②：人才池 -->
+        <div class="flip-card part" tabindex="0" aria-label="候选人才池，点击查看详情">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div>
+                <div class="flip-head">
+                  <h3>候选人才池</h3>
+                  <span class="flip-sub">人才储备</span>
+                </div>
+                <ul>
+                  <li>对教育类产品无兴趣，但对别的领域的开发项目持开放态度。</li>
+                  <li>实验室长期有大量 demo 开发需求，主题多样，与本次 AI 教育招人无直接关联。</li>
+                  <li>有兴趣<b>以短期、不定期外包身份与实验室合作</b>，请翻开这里。</li>
+                </ul>
+              </div>
+              <div class="flip-hint">点击翻面 →</div>
+              <span class="card-tag part">兼职</span>
+            </div>
+            <div class="flip-back">
+              <h4>灵活的多面手，潜力股</h4>
+              <ul>
+                <li>不要求对 AI 教育有认同感</li>
+                <li>以<b>单次或短期任务</b>合作为主，按需干活</li>
+                <li>本次招人不主动推进，有需求时我们会主动联系</li>
+                <li>可保持联系，且希望进入我们的人才储备没有冒犯到您</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.flip-deck -->
+
+      <div class="meta-row" data-reveal>
+        <span>线上远程为主</span>
+        <span>南大苏州校区（智科 / 智软）可线下</span>
+      </div>
+
+      <ul class="note-list" data-reveal>
+        <li>我们选择将完整背景向你展示，是希望你在了解<b>风险、机遇和选择</b>的前提下做出最适合自己的判断。</li>
+        <li>对于选择全职画像的候选人，我们有 1–2 周的沉淀期；期间如遇更匹配的候选人会优先考虑，但一定在 1–2 周内给你明确答复。</li>
+        <li>感谢您理解我们是一个刚起步的小团队，相对于人才数量更追求人才密度，因此岗位数量有限。</li>
+      </ul>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="5">往下读 · 最后一页 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ 最后一页 -->
+  <section class="chapter page-main">
+    <div class="wrap">
+
+      <!-- 薪资 -->
+      <div class="beat" data-reveal>
+        <div class="k" style="font-size:22px;padding-top:3px">¥</div>
+        <div>
+          <h3 class="sub">关于薪资，提前谈妥</h3>
+          <div class="payline">如果选择线下全职的同学，可以<b>按日薪结算</b>；线上远程<b>按产出核算</b> —— 大致是「你一个月的产出 ≈ 多少个线下全职实习日的工作量」。这里确实有主观评价的成分，但我们和很多实习生同学合作过，<b>到目前为止，没有在薪资上发生过任何矛盾。</b></div>
+        </div>
+      </div>
+
+      <!-- 寄语 -->
+      <div class="cta" style="margin-top:32px" data-reveal>
+        <h2>感谢您愿意花时间读到这里</h2>
+        <p>如您所见，我们作为一个刚起步的小团队，正抱着绝对诚挚、尊重和开放的态度寻找潜在合伙人、开发大佬和潜力股们。</p>
+        <p>我们有 1-2 周的沉淀期，这段时间也是给大家充分考虑。欢迎私聊了解更多你关心的事项，在合适的范围内我们都会尽量清晰告知。</p>
+        <p>我们只对您有一个要求：<b>对自己的能力、需求、喜好和规划有准确的认识，充分理解岗位的要求和期望</b>，不要轻易辜负自己的选择和我们的信任。</p>
+        <p style="margin-top:16px;font-size:16px;color:var(--muted)">最后，希望你能在<b>对自己充分了解的情况下</b>，慎重考虑，做出真正适合自己的选择。无论最终来或不来，都是一次相遇。</p>
+        <small>你已经有我们的联系方式了 · 剩下的随时聊</small>
+      </div>
+
+      <div class="end-foot" data-reveal>
+        © <span id="yr">2026</span> · 南京大学 LINK 实验室 · <a class="link" href="https://www.nju-link.com" target="_blank" rel="noopener">nju-link.com</a> · 一支想把「学习」重做一遍的小团队
+      </div>
+
+      <div class="chapter-next" data-reveal>
+        <button class="back-btn" data-goto="0">↑ &nbsp;回到开头</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- lightbox -->
+<div class="lightbox" role="dialog" aria-label="图片大图" aria-modal="true">
+  <img src="" alt="大图" />
+  <div class="hint">点击任意处 / 按 Esc 关闭</div>
+</div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('#dots .dot-btn'));
+  var progressBar = document.getElementById('progressBar');
+  var active = 0;
+
+  function playReveal(chapter){
+    var revs = [].slice.call(chapter.querySelectorAll('[data-reveal]'));
+    if (reduce){ revs.forEach(function(el){ el.classList.add('in'); }); return; }
+    revs.forEach(function(el){ el.classList.remove('in'); });
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      revs.forEach(function(el){ el.classList.add('in'); });
+    }); });
+  }
+
+  function show(i){
+    i = Math.max(0, Math.min(chapters.length - 1, i));
+    chapters.forEach(function(c, idx){ c.classList.toggle('active', idx === i); });
+    dots.forEach(function(d, idx){ d.classList.toggle('on', idx === i); });
+    active = i;
+    progressBar.style.width = ((i + 1) / chapters.length * 100).toFixed(1) + '%';
+    window.scrollTo(0, 0);
+    playReveal(chapters[i]);
+  }
+
+  document.querySelectorAll('[data-goto]').forEach(function(btn){
+    btn.addEventListener('click', function(){ show(parseInt(btn.getAttribute('data-goto'), 10) || 0); });
+  });
+
+  // 键盘左右/上下翻章（不改变视觉设计，纯便利）
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown'){ if (active < chapters.length - 1) show(active + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ if (active > 0) show(active - 1); }
+  });
+
+  // flip cards
+  document.querySelectorAll('.flip-card').forEach(function(c){
+    function toggle(){ c.classList.toggle('flipped'); }
+    c.addEventListener('click', toggle);
+    c.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); } });
+  });
+
+  // lightbox
+  var lb = document.querySelector('.lightbox');
+  var lbImg = lb ? lb.querySelector('img') : null;
+  document.querySelectorAll('[data-lightbox]').forEach(function(o){
+    o.addEventListener('click', function(ev){
+      ev.preventDefault();
+      if (lb && lbImg){ lbImg.src = o.getAttribute('href'); lb.classList.add('open'); }
+    });
+  });
+  if (lb){
+    lb.addEventListener('click', function(){ lb.classList.remove('open'); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') lb.classList.remove('open'); });
+  }
+
+  try{ document.getElementById('yr').textContent = new Date().getFullYear(); }catch(e){}
+
+  show(0);
+})();
+</script>
+</body>
+</html>

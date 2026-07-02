@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>我们在做一件什么事 — 一封信</title>
+<style>
+:root{
+  --bg:#faf7f2;--bg-2:#f2ede4;--surface:#fffdfa;--surface-2:#f6f1e9;
+  --border:rgba(64,50,36,.13);--border-strong:rgba(64,50,36,.22);
+  --text:#2b2622;--muted:#6f665c;--muted-2:#9b9286;
+  --clay:#c15f3c;--clay-2:#a64a2c;--clay-bright:#d97757;--clay-soft:#f4e7df;
+  --gold:#bd8b3a;
+  --serif:"Songti SC","STSong","Noto Serif SC",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  --maxw:1000px;--topbar-h:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(1100px 620px at 80% -12%,rgba(217,119,87,.10),transparent 62%),
+  radial-gradient(900px 560px at 4% 2%,rgba(189,139,58,.07),transparent 58%),
+  linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;width:100%}
+.page-main{padding-top:calc(var(--topbar-h) + 52px);padding-bottom:80px}
+@media(max-width:640px){.page-main{padding-top:calc(var(--topbar-h) + 32px)}}
+
+/* type */
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--clay);
+  display:inline-flex;align-items:center;gap:9px;margin-bottom:18px;text-transform:uppercase}
+.eyebrow::before{content:"";width:24px;height:1px;background:var(--clay);opacity:.65}
+h2.title{font-family:var(--serif);font-size:clamp(26px,3.9vw,40px);line-height:1.2;letter-spacing:-.01em;font-weight:700;margin-bottom:16px}
+.lede{color:var(--muted);font-size:clamp(15px,1.7vw,18px);max-width:66ch}
+.lede b{color:var(--text);font-weight:650}
+.accent{color:var(--clay)}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+@media(max-width:760px){.pillars{grid-template-columns:1fr}}
+.pillar{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:0 1px 3px rgba(70,50,30,.05)}
+.pillar .n{font-family:var(--mono);font-size:12px;color:var(--clay)}
+.pillar h4{font-size:17px;font-weight:700;margin:8px 0 6px}
+.pillar p{color:var(--muted);font-size:14px}
+
+/* topbar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;padding:0 26px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  background:rgba(250,247,242,.8);border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;letter-spacing:.01em;line-height:1.15}
+.mark{width:27px;height:27px;border-radius:8px;background:var(--clay);display:grid;place-items:center;
+  font-family:var(--serif);font-weight:700;font-size:15px;color:#fff;box-shadow:0 3px 12px rgba(193,95,60,.4)}
+.brand small{color:var(--muted-2);font-weight:500}
+.chap-tag{font-family:var(--mono);font-size:12px;color:var(--muted-2);letter-spacing:.04em}
+@media(max-width:640px){.topbar{padding:0 14px}.brand small{display:none}.brand .bl{display:none}}
+
+/* chapter next nav */
+.chapter-next{margin-top:72px;padding-top:32px;border-top:1px solid var(--border);text-align:center}
+.next-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;
+  letter-spacing:.04em;color:var(--clay);text-decoration:none;
+  border:1px solid rgba(193,95,60,.35);border-radius:999px;padding:9px 20px;
+  transition:background .2s,border-color .2s,transform .18s}
+.next-btn:hover{background:var(--clay-soft);border-color:var(--clay);transform:translateY(-1px)}
+
+/* reveal */
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+[data-reveal].in{opacity:1;transform:none}
+[data-reveal][data-d="1"]{transition-delay:.08s}
+[data-reveal][data-d="2"]{transition-delay:.16s}
+[data-reveal][data-d="3"]{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}[data-reveal]{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="mark">L</span>
+    <span>NJU&#8209;LINK LAB<br class="bl"><small>南京大学 · AI 教育团队</small></span>
+  </div>
+  <span class="chap-tag">03 / 06 &nbsp;我们在做一件什么事</span>
+</header>
+
+<main class="page-main">
+  <div class="wrap">
+    <div class="eyebrow" data-reveal>我们在做一件什么事</div>
+    <h2 class="title" data-reveal data-d="1">我们到底在干啥 —— <span class="accent">我们在创业</span></h2>
+    <p class="lede" data-reveal data-d="1">不适合放在公共平台招人广告上的事，就是咱们其实是一个初创团队，正在推进 <b>「AI 教育」</b>方向的创业项目落地。我知道这可能有点突然，但是不着急听我慢慢讲。</p>
+    <p class="lede" style="margin-top:14px" data-reveal data-d="2">接下来我们抱着极大的诚意，初步介绍一下我们的路线和项目背景，但是出于保密原则，还请您<b>不要随意转发、传播和在公共平台上讨论，非常感谢！</b>如果觉得身边有认识的贤才大能符合我们在寻找的画像，欢迎举荐！</p>
+
+    <div class="pillars">
+      <div class="pillar" data-reveal data-d="1">
+        <div class="n">身份</div>
+        <h4>一支创业团队</h4>
+        <p>从实验室里长出来，但奔着做产品、做公司去 —— 不是发完论文就散场。</p>
+      </div>
+      <div class="pillar" data-reveal data-d="2">
+        <div class="n">目标</div>
+        <h4>孵化出一家公司</h4>
+        <p>把手里的项目一步步做成真正能立住的事业，这是我们清晰的路线。</p>
+      </div>
+      <div class="pillar" data-reveal data-d="3">
+        <div class="n">方向</div>
+        <h4>AI 教育</h4>
+        <p>方向已经选定。至于凭什么是它，下一页跟你解释。</p>
+      </div>
+    </div>
+
+    <p class="lede" style="margin-top:30px" data-reveal>至于<b>为什么偏偏押注「AI 教育」、这条路凭什么走得通</b> —— 那正是下一页要跟你一条条讲清楚的事。</p>
+
+    <!-- chapter nav -->
+    <div class="chapter-next" data-reveal>
+      <a href="04-why.html" class="next-btn">往下读 · 为什么是 AI 教育 →</a>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var rev = [].slice.call(document.querySelectorAll('[data-reveal]'));
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
+    rev.forEach(function(e){ io.observe(e); });
+  } else { rev.forEach(function(e){ e.classList.add('in'); }); }
+})();
+</script>
+</body>
+</html>
