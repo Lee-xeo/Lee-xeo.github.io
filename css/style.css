@@ -60,7 +60,7 @@ a:hover {
     z-index: 1000;
 }
 
-.lang-switcher button {
+.lang-switcher a {
     background: none;
     border: none;
     cursor: pointer;
@@ -68,9 +68,14 @@ a:hover {
     font-weight: bold;
     color: var(--text-color);
     opacity: 0.7;
+    text-decoration: none;
 }
 
-.lang-switcher button.active {
+.lang-switcher a:hover {
+    opacity: 1;
+}
+
+.lang-switcher a.active {
     opacity: 1;
     color: var(--accent-color);
 }
@@ -157,7 +162,7 @@ a:hover {
 }
 
 /* 专门为地址项里的文字设置样式 */
-.location-item span[data-lang-key="location"] {
+.location-item span {
     font-size: 0.6em; /* 文字大小是图标大小的一半 */
     margin-left: 8px; /* 在图标和文字之间增加一点间距 */
     font-family: 'Lato', sans-serif; /* 确保它使用正文字体 */
@@ -343,7 +348,7 @@ footer {
         margin-top: 15px;
     }
 
-    .location-item span[data-lang-key="location"] {
+    .location-item span {
         font-size: 0.6em; /* 在手机上可以稍微调大一点点地址文字 */
     }
 }
