@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>07 · 时间线与里程碑</title>
+<style>
+:root{
+  --bg:#faf7f2;--bg-2:#f2ede4;--surface:#fffdfa;--surface-2:#f6f1e9;
+  --border:rgba(64,50,36,.13);--border-strong:rgba(64,50,36,.22);
+  --text:#2b2622;--muted:#6f665c;--muted-2:#9b9286;
+  --clay:#c15f3c;--clay-2:#a64a2c;--clay-bright:#d97757;--clay-soft:#f4e7df;
+  --gold:#bd8b3a;--gold-2:#9a6f27;--gold-soft:rgba(189,139,58,.10);
+  --serif:"Songti SC","STSong","Noto Serif SC",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  --maxw:1000px;--topbar-h:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(1100px 620px at 80% -12%,rgba(217,119,87,.10),transparent 62%),
+  radial-gradient(900px 560px at 4% 2%,rgba(189,139,58,.07),transparent 58%),
+  linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;width:100%}
+.page-main{padding-top:calc(var(--topbar-h) + 52px);padding-bottom:80px;display:flex;flex-direction:column;min-height:100vh}
+.page-main > .wrap{margin:auto;min-width:0}
+@media(max-width:640px){.page-main{padding-top:calc(var(--topbar-h) + 32px)}}
+
+h2.title{font-family:var(--serif);font-size:clamp(26px,3.9vw,40px);line-height:1.2;letter-spacing:-.01em;font-weight:700;margin-bottom:16px}
+.lede{color:var(--muted);font-size:clamp(15px,1.7vw,18px);max-width:66ch}
+.lede b{color:var(--text);font-weight:650}
+.accent{color:var(--clay)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--clay);
+  display:inline-flex;align-items:center;gap:9px;margin-bottom:18px;text-transform:uppercase}
+.eyebrow::before{content:"";width:24px;height:1px;background:var(--clay);opacity:.65}
+
+/* 并行标记 */
+.parallel-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;
+  color:var(--gold-2);background:var(--gold-soft);border:1px solid rgba(189,139,58,.35);
+  border-radius:999px;padding:6px 13px;margin-top:18px}
+.parallel-badge b{color:var(--text)}
+
+/* ===== 分叉点之前 · 已完成的共享主干（居中） ===== */
+.shared{margin-top:30px;display:flex;flex-direction:column;align-items:center}
+.s-item{display:flex;flex-direction:column;align-items:center;width:100%;max-width:480px}
+.s-stem{width:2px;height:18px;background:var(--border-strong);opacity:.55}
+.s-dot{width:13px;height:13px;border-radius:50%;background:var(--surface);border:2px solid var(--muted-2);flex-shrink:0}
+.s-card{width:100%;margin-top:11px;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:14px;padding:14px 18px;text-align:center}
+.s-card .done{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--muted-2);
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px 11px;display:inline-block;margin-bottom:8px}
+.s-card h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.s-card p{color:var(--muted);font-size:13.6px;line-height:1.58}
+.s-card p b{color:var(--text);font-weight:650}
+/* 分叉点 = 当前 */
+.s-item.now .s-dot{width:16px;height:16px;background:var(--clay);border-color:var(--clay);box-shadow:0 0 0 4px var(--clay-soft)}
+.s-item.now .s-card{background:linear-gradient(135deg,var(--clay-soft),var(--gold-soft));border-color:var(--border-strong);box-shadow:0 8px 24px rgba(80,55,30,.09)}
+.s-item.now .done{color:var(--clay);background:var(--surface);border-color:rgba(193,95,60,.35)}
+.s-item.now .s-card h4{font-family:var(--serif);font-size:18px}
+
+/* ===== 分叉桥：从当前点分向两侧 ===== */
+.diverge{position:relative;height:40px}
+.diverge .dn{position:absolute;left:calc(50% - 1px);top:0;width:2px;height:15px;background:var(--border-strong)}
+.diverge .arc{position:absolute;left:6px;right:6px;top:15px;height:25px;
+  border:2px solid var(--border-strong);border-bottom:none;border-radius:24px 24px 0 0}
+
+/* ===== 两侧时间轴（左 B / 右 C，中间淡分界线） ===== */
+.twoside{position:relative;display:grid;grid-template-columns:1fr 1fr;column-gap:44px}
+.twoside::before{content:"";position:absolute;left:50%;top:0;bottom:26px;width:1px;background:var(--border-strong);opacity:.5}
+.side{display:flex;flex-direction:column;min-width:0}
+.side-head{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:6px 14px;margin-bottom:6px}
+.side.b .side-head{color:var(--gold-2);background:var(--gold-soft);border:1px solid var(--gold);align-self:flex-start}
+.side.c .side-head{color:var(--clay);background:var(--clay-soft);border:1px solid var(--clay);align-self:flex-end}
+.trow{display:grid;gap:15px}
+.side.b .trow{grid-template-columns:auto 1fr}
+.side.c .trow{grid-template-columns:1fr auto}
+.side.c .trail{order:2}
+.trail{display:flex;flex-direction:column;align-items:center}
+.tdot{width:14px;height:14px;border-radius:50%;background:var(--surface);margin-top:4px;flex-shrink:0}
+.tline{flex:1;width:2px;margin-top:5px}
+.side.b .tdot{border:2px solid var(--gold)}
+.side.b .tline{background:var(--gold);opacity:.5}
+.side.c .tdot{border:2px solid var(--clay)}
+.side.c .tline{background:var(--clay);opacity:.5}
+.side.b .trow.key .tdot{background:var(--gold);box-shadow:0 0 0 4px var(--gold-soft)}
+.side.c .trow.key .tdot{background:var(--clay);box-shadow:0 0 0 4px var(--clay-soft)}
+.tbody{padding-bottom:24px;min-width:0}
+.side.c .tbody{text-align:right}
+.side.b .trow.key .tbody,.side.c .trow.key .tbody{background:var(--surface);border:1px solid var(--border-strong);
+  border-radius:14px;padding:15px 17px;box-shadow:0 8px 22px rgba(80,55,30,.08)}
+.side.b .trow.key .tbody{border-top:3px solid var(--gold)}
+.side.c .trow.key .tbody{border-top:3px solid var(--clay)}
+.t-when{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.side.b .t-when{color:var(--gold-2)}
+.side.c .t-when{color:var(--clay)}
+.tbody h4{font-size:15.5px;font-weight:700;margin-bottom:4px;line-height:1.35}
+.tbody p{color:var(--muted);font-size:13.8px;line-height:1.6}
+.tbody p b{color:var(--text);font-weight:650}
+.t-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.side.c .t-tags{justify-content:flex-end}
+.t-tags span{font-family:var(--mono);font-size:10.5px;padding:4px 10px;border-radius:999px;border:1px solid}
+.side.b .t-tags span{color:var(--gold-2);background:var(--gold-soft);border-color:var(--gold)}
+.side.c .t-tags span{color:var(--clay);background:var(--clay-soft);border-color:var(--clay)}
+@media(max-width:640px){
+  .twoside{grid-template-columns:1fr;column-gap:0}
+  .twoside::before{display:none}
+  .diverge{display:none}
+  .side{margin-top:22px}
+  .side.c .trow{grid-template-columns:auto 1fr}
+  .side.c .trail{order:0}
+  .side.c .tbody{text-align:left}
+  .side.c .t-tags{justify-content:flex-start}
+  .side.c .side-head{align-self:flex-start}
+}
+
+/* note list */
+.note-list{margin-top:40px;color:var(--muted);font-size:14.5px;line-height:1.75;padding-left:18px;list-style:disc}
+.note-list li{margin-top:8px}
+.note-list li b{color:var(--text);font-weight:650}
+
+/* cta */
+.cta{background:linear-gradient(135deg,var(--clay-soft),rgba(189,139,58,.10));
+  border:1px solid var(--border-strong);border-radius:22px;padding:54px 40px;text-align:center;margin-top:36px;position:relative;overflow:hidden}
+.cta h2{font-family:var(--serif);font-size:clamp(25px,4.2vw,38px);font-weight:700;letter-spacing:-.01em;margin-bottom:16px}
+.cta p{color:var(--muted);font-size:17px;max-width:58ch;margin:0 auto;line-height:1.75}
+.cta p+p{margin-top:12px}
+.cta p b{color:var(--text)}
+.cta small{display:block;margin-top:24px;color:var(--muted-2);font-size:13.5px;font-family:var(--mono)}
+.link{color:var(--clay);text-decoration:none;border-bottom:1px solid rgba(193,95,60,.4);transition:color .2s,border-color .2s}
+.link:hover{color:var(--clay-2);border-color:var(--clay-2)}
+.end-foot{margin-top:32px;text-align:center;color:var(--muted-2);font-size:13px;font-family:var(--mono)}
+
+/* topbar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 26px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  background:rgba(250,247,242,.8);border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;letter-spacing:.01em;line-height:1.15;flex-shrink:0}
+.mark{width:27px;height:27px;flex-shrink:0;border-radius:8px;background:var(--clay);display:grid;place-items:center;
+  font-family:var(--serif);font-weight:700;font-size:15px;color:#fff;box-shadow:0 3px 12px rgba(193,95,60,.4)}
+.brand small{color:var(--muted-2);font-weight:500}
+.dots{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.dot-btn{font-family:var(--mono);font-size:12px;color:var(--muted-2);background:var(--surface);border:1px solid var(--border);
+  border-radius:999px;padding:6px 11px;line-height:1;text-decoration:none;
+  transition:color .2s,background .2s,border-color .2s,box-shadow .2s}
+.dot-btn:hover{color:var(--text);border-color:var(--border-strong)}
+.dot-btn.on{color:#fff;background:var(--clay);border-color:transparent;box-shadow:0 3px 12px rgba(193,95,60,.32)}
+@media(max-width:640px){.topbar{padding:0 12px;gap:10px}.brand small{display:none}.brand .bl{display:none}
+  .dots{gap:5px}.dot-btn{padding:5px 8px;font-size:11px}}
+.progress{position:fixed;top:var(--topbar-h);left:0;right:0;height:3px;background:rgba(64,50,36,.08);z-index:59}
+.progress>i{display:block;height:100%;background:var(--clay-bright)}
+
+.chapter-next{margin-top:48px;padding-top:32px;border-top:1px solid var(--border);text-align:center}
+.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  background:transparent;border:1px solid var(--border);border-radius:16px;padding:16px 32px;
+  text-decoration:none;color:var(--muted-2);font-family:var(--mono);font-size:13px;
+  transition:color .2s,border-color .2s}
+.back-btn:hover{color:var(--clay);border-color:var(--clay)}
+
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+[data-reveal].in{opacity:1;transform:none}
+[data-reveal][data-d="1"]{transition-delay:.08s}
+[data-reveal][data-d="2"]{transition-delay:.16s}
+[data-reveal][data-d="3"]{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="mark">L</span>
+    <span>NJU&#8209;LINK LAB<br class="bl"><small>南京大学 · AI 教育团队</small></span>
+  </div>
+    <nav class="dots" aria-label="章节导航">
+    <a class="dot-btn" href="01-overview.html" title="业务全景">01</a>
+    <a class="dot-btn" href="02-two-tracks.html" title="一个方向，两条路">02</a>
+    <a class="dot-btn" href="03-toc.html" title="to-C · Vibe Learning">03</a>
+    <a class="dot-btn" href="04-tob.html" title="to-B · 多角色平台">04</a>
+    <a class="dot-btn" href="05-nju.html" title="南大 · 起点">05</a>
+    <a class="dot-btn" href="06-interplay.html" title="两端交互">06</a>
+    <a class="dot-btn on" href="07-roadmap.html" title="时间线 · 里程碑">07</a>
+  </nav>
+</header>
+<div class="progress"><i style="width:100%"></i></div>
+
+<main class="page-main">
+  <div class="wrap">
+    <div class="eyebrow" data-reveal>时间线 · 里程碑</div>
+    <h2 class="title" data-reveal data-d="1">我们已经走到<span class="accent">分叉点</span></h2>
+    <p class="lede" data-reveal data-d="1">前面这些是<b>已经完成的事</b>——技术验证、申请项目、初版 Demo。<b>「初版 Demo 完成」就是我们当前所在的分叉点</b>：从这里开始，B 端（左）与 C 端（右）各自往前。</p>
+
+    <!-- 分叉点之前 · 已完成的共享主干 -->
+    <div class="shared" data-reveal data-d="2">
+      <div class="s-item">
+        <span class="s-stem"></span><span class="s-dot"></span>
+        <div class="s-card">
+          <span class="done">已完成</span>
+          <h4>申请项目 · 拿到背书</h4>
+          <p>南大「计算机学科教育专用大模型」入选<b>教育部首批遴选</b>（结果：推荐）。</p>
+        </div>
+      </div>
+      <div class="s-item">
+        <span class="s-stem"></span><span class="s-dot"></span>
+        <div class="s-card">
+          <span class="done">已完成</span>
+          <h4>初步热身</h4>
+          <p>组建初步团队，把弯路走一遍，探索合作和开发模式。</p>
+        </div>
+      </div>
+      <div class="s-item now">
+        <span class="s-stem"></span><span class="s-dot"></span>
+        <div class="s-card">
+          <span class="done">当前 · 分叉点</span>
+          <h4>初版 Demo 完成</h4>
+          <p>端到端的初版 Demo 已经跑通——<b>两条产品线，从这里分头推进</b>。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分叉桥 -->
+    <div class="diverge" data-reveal><span class="dn"></span><span class="arc"></span></div>
+
+    <!-- 两侧时间轴 -->
+    <div class="twoside">
+
+      <!-- 左 · B 端 -->
+      <div class="side b" data-reveal>
+        <span class="side-head">B 端 · 高校 AI 教育平台</span>
+        <div class="trow">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">现在起 · 并行</div>
+            <h4>打磨南大平台「母版」</h4>
+            <p>以南大项目为第一块试验田，沉淀一套<b>成熟的 B 端方案母版</b>。</p>
+          </div>
+        </div>
+        <div class="trow key">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">里程碑 · 8 月底–9 月前</div>
+            <h4>上线 1 个达到交付水平的 B 端产品</h4>
+            <p>开学前至少完成<b>一个能真正交付的 B 端产品</b>。</p>
+            <div class="t-tags"><span>B 端 · 可交付产品 ×1</span></div>
+          </div>
+        </div>
+        <div class="trow">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">测试 · 开学初</div>
+            <h4>进刘老师课堂试点</h4>
+            <p>在我们自己开设的课程中和组内进行试用，<b>收集第一批使用反馈</b>。</p>
+          </div>
+        </div>
+        <div class="trow">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">迭代 · 学期内</div>
+            <h4>打磨可复制的交付母版</h4>
+            <p>把交付流程与模板固化，为<b>换壳复制</b>做准备。</p>
+          </div>
+        </div>
+        <div class="trow key">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">里程碑 · 南大项目交付</div>
+            <h4>完成 B 端第一单，积累初始经费</h4>
+            <p>在南大校内产生影响力，把南大官方背书站稳。</p>
+            <div class="t-tags"><span>B 端 · 结单 ×1</span></div>
+          </div>
+        </div>
+        <div class="trow">
+          <div class="trail"><span class="tdot"></span></div>
+          <div class="tbody">
+            <div class="t-when">扩张 · 成熟之后</div>
+            <h4>复制到下一所学校</h4>
+            <p>换 IP、换壳——<b>多米诺推倒下一张</b>，边际成本递减。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右 · C 端 -->
+      <div class="side c" data-reveal>
+        <span class="side-head">C 端 · Vibe Learning</span>
+        <div class="trow">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">现在起 · 并行</div>
+            <h4>打磨底座与 Vibe 引擎</h4>
+            <p>把共享底座与认知引擎，<b>打磨到能撑起真实产品</b>。</p>
+          </div>
+        </div>
+        <div class="trow key">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">里程碑 · 8 月底–9 月前</div>
+            <h4>上线初代 C 端产品</h4>
+            <p>开学前至少完成<b>一个可上线的 C 端出版物</b>。</p>
+            <div class="t-tags"><span>C 端 · 可上线出版物 ×1</span></div>
+          </div>
+        </div>
+        <div class="trow">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">α 测试 · 开学初</div>
+            <h4>真实学生试用</h4>
+            <p>在校园里召集<b>第一批学生真实用户</b>，开展 α 测试，跑通闭环。</p>
+          </div>
+        </div>
+        <div class="trow">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">迭代 · 学期内</div>
+            <h4>刚需切入，校内推广</h4>
+            <p>召集第一批 β 测试用户，以<b>考研</b>等刚需内容切入校内推广。</p>
+          </div>
+        </div>
+        <div class="trow key">
+          <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+          <div class="tbody">
+            <div class="t-when">里程碑 · 第一套闭环课程</div>
+            <h4>C 端产品走出 β 测试</h4>
+            <p>完成<b>第一个闭环课程（暂定 408 考研）</b>，剑指王道</p>
+            <div class="t-tags"><span>C 端 · 可上线出版物 ×1</span></div>
+          </div>
+        </div>
+        <div class="trow">
+          <div class="trail"><span class="tdot"></span></div>
+          <div class="tbody">
+            <div class="t-when">扩张 · 成熟之后</div>
+            <h4>走出校园，正式扩散</h4>
+            <p>产品打磨成熟后，<b>正式上线、对外扩散</b>。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <ul class="note-list" data-reveal>
+      <li>我们把完整业务线向你展示，是希望你在了解<b>方向、机遇与节奏</b>的前提下，判断这件事和你对不对得上频率。</li>
+      <li>还有一些更内部的信息（合作细节、更具体的排期与分工），会在进一步深入参与后再逐层展开。</li>
+    </ul>
+
+    <div class="cta" data-reveal>
+      <h2>以上是我们内部商业计划书的完整内容</h2>
+      <p>如果你觉得这份 BP 还算靠谱，可以来掺一脚，欢迎直接联系，我们欢迎会上见。</p>
+      <small>你已经有我们的联系方式了 · 剩下的随时聊</small>
+    </div>
+
+    <div class="end-foot" data-reveal>
+      © <span id="yr">2026</span> · 南京大学 LINK 实验室 · <a class="link" href="https://www.nju-link.com" target="_blank" rel="noopener">nju-link.com</a> · 一支想把「学习」重做一遍的小团队
+    </div>
+
+    <div class="chapter-next" data-reveal>
+      <a class="back-btn" href="01-overview.html">↑ &nbsp;回到开头</a>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{threshold:0.1});
+  document.querySelectorAll('[data-reveal]').forEach(function(el){ obs.observe(el); });
+  try{ document.getElementById('yr').textContent = new Date().getFullYear(); }catch(e){}
+})();
+</script>
+</body>
+</html>

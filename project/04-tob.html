@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>04 · to-B · 多角色教学平台</title>
+<style>
+:root{
+  --bg:#faf7f2;--bg-2:#f2ede4;--surface:#fffdfa;--surface-2:#f6f1e9;
+  --border:rgba(64,50,36,.13);--border-strong:rgba(64,50,36,.22);
+  --text:#2b2622;--muted:#6f665c;--muted-2:#9b9286;
+  --clay:#c15f3c;--clay-2:#a64a2c;--clay-bright:#d97757;--clay-soft:#f4e7df;
+  --gold:#bd8b3a;--gold-2:#9a6f27;--gold-soft:rgba(189,139,58,.10);
+  --serif:"Songti SC","STSong","Noto Serif SC",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  --maxw:1000px;--topbar-h:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(1100px 620px at 80% -12%,rgba(217,119,87,.10),transparent 62%),
+  radial-gradient(900px 560px at 4% 2%,rgba(189,139,58,.07),transparent 58%),
+  linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;width:100%}
+.page-main{padding-top:calc(var(--topbar-h) + 52px);padding-bottom:80px;display:flex;flex-direction:column;min-height:100vh}
+.page-main > .wrap{margin:auto;min-width:0}
+@media(max-width:640px){.page-main{padding-top:calc(var(--topbar-h) + 32px)}}
+
+h2.title{font-family:var(--serif);font-size:clamp(26px,3.9vw,40px);line-height:1.2;letter-spacing:-.01em;font-weight:700;margin-bottom:16px}
+.lede{color:var(--muted);font-size:clamp(15px,1.7vw,18px);max-width:66ch}
+.lede b{color:var(--text);font-weight:650}
+.accent-g{color:var(--gold-2)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--clay);
+  display:inline-flex;align-items:center;gap:9px;margin-bottom:18px;text-transform:uppercase}
+.eyebrow::before{content:"";width:24px;height:1px;background:var(--clay);opacity:.65}
+
+/* 五助 */
+.assist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+@media(max-width:760px){.assist-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.assist-grid{grid-template-columns:1fr}}
+.assist{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;
+  box-shadow:0 1px 3px rgba(70,50,30,.05);position:relative}
+.assist.core{border-left:3px solid var(--clay)}
+.assist .top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+.assist h4{font-family:var(--serif);font-size:18px;font-weight:700}
+.assist .w{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;padding:2px 8px;border-radius:999px;
+  color:var(--muted-2);background:var(--surface-2);border:1px solid var(--border);white-space:nowrap}
+.assist .w.heavy{color:var(--clay);background:var(--clay-soft);border-color:rgba(193,95,60,.3)}
+.assist p{color:var(--muted);font-size:14px;line-height:1.62}
+
+.quote{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--clay-bright);
+  border-radius:12px;padding:20px 24px;margin-top:24px;box-shadow:0 1px 3px rgba(70,50,30,.05);max-width:64ch}
+.quote p{color:var(--text);font-size:16px;line-height:1.75}
+.quote .src{font-family:var(--mono);font-size:12.5px;color:var(--muted-2);margin-top:10px}
+
+/* topbar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 26px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  background:rgba(250,247,242,.8);border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;letter-spacing:.01em;line-height:1.15;flex-shrink:0}
+.mark{width:27px;height:27px;flex-shrink:0;border-radius:8px;background:var(--clay);display:grid;place-items:center;
+  font-family:var(--serif);font-weight:700;font-size:15px;color:#fff;box-shadow:0 3px 12px rgba(193,95,60,.4)}
+.brand small{color:var(--muted-2);font-weight:500}
+.dots{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.dot-btn{font-family:var(--mono);font-size:12px;color:var(--muted-2);background:var(--surface);border:1px solid var(--border);
+  border-radius:999px;padding:6px 11px;line-height:1;text-decoration:none;
+  transition:color .2s,background .2s,border-color .2s,box-shadow .2s}
+.dot-btn:hover{color:var(--text);border-color:var(--border-strong)}
+.dot-btn.on{color:#fff;background:var(--clay);border-color:transparent;box-shadow:0 3px 12px rgba(193,95,60,.32)}
+@media(max-width:640px){.topbar{padding:0 12px;gap:10px}.brand small{display:none}.brand .bl{display:none}
+  .dots{gap:5px}.dot-btn{padding:5px 8px;font-size:11px}}
+.progress{position:fixed;top:var(--topbar-h);left:0;right:0;height:3px;background:rgba(64,50,36,.08);z-index:59}
+.progress>i{display:block;height:100%;background:var(--clay-bright)}
+
+.chapter-next{margin-top:72px;padding-top:32px;border-top:1px solid var(--border);text-align:center}
+.next-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;
+  letter-spacing:.04em;color:var(--clay);text-decoration:none;background:transparent;
+  border:1px solid rgba(193,95,60,.35);border-radius:999px;padding:9px 20px;
+  transition:background .2s,border-color .2s,transform .18s}
+.next-btn:hover{background:var(--clay-soft);border-color:var(--clay);transform:translateY(-1px)}
+
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+[data-reveal].in{opacity:1;transform:none}
+[data-reveal][data-d="1"]{transition-delay:.08s}
+[data-reveal][data-d="2"]{transition-delay:.16s}
+[data-reveal][data-d="3"]{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="mark">L</span>
+    <span>NJU&#8209;LINK LAB<br class="bl"><small>南京大学 · AI 教育团队</small></span>
+  </div>
+    <nav class="dots" aria-label="章节导航">
+    <a class="dot-btn" href="01-overview.html" title="业务全景">01</a>
+    <a class="dot-btn" href="02-two-tracks.html" title="一个方向，两条路">02</a>
+    <a class="dot-btn" href="03-toc.html" title="to-C · Vibe Learning">03</a>
+    <a class="dot-btn on" href="04-tob.html" title="to-B · 多角色平台">04</a>
+    <a class="dot-btn" href="05-nju.html" title="南大 · 起点">05</a>
+    <a class="dot-btn" href="06-interplay.html" title="两端交互">06</a>
+    <a class="dot-btn" href="07-roadmap.html" title="时间线 · 里程碑">07</a>
+  </nav>
+</header>
+<div class="progress"><i style="width:57.1%"></i></div>
+
+<main class="page-main">
+  <div class="wrap">
+    <div class="eyebrow" data-reveal>产品线二 · to-B</div>
+    <h2 class="title" data-reveal data-d="1">多角色教学平台 —— <span class="accent-g">增强与赋能</span></h2>
+    <p class="lede" data-reveal data-d="1">这是我们<b>当下正在落地</b>的产品线，也是团队的第一个试炼场。教学系统内的 B 端客户需要的是一个工具性平台——让<b>学生、老师、教务等</b>各自的工作都被 AI 辅助提效。</p>
+    <p class="lede" style="margin-top:14px" data-reveal data-d="2">我们把平台拆成<b>五个「助」</b>的业务线：助学、助教、助研、助管、国际交流。它们共用同一套底层，但各自面向不同角色、深浅不同。</p>
+    <p class="lede" style="margin-top:14px" data-reveal data-d="2">作为有产品追求的团队，我们想做的不是交差走人，而是一个<b>真正好用的自研原生教学平台</b>——这需要高品位的产品设计和够硬的技术支撑。</p>
+
+    <div class="assist-grid" data-reveal data-d="2">
+      <div class="assist core">
+        <div class="top"><h4>助学</h4><span class="w heavy">核心 · 重</span></div>
+        <p>给学生「轻引导式教学」。注意：这里<b>刻意不做 Vibe</b>，走的是轻引导，而非替代。</p>
+      </div>
+      <div class="assist core">
+        <div class="top"><h4>助教</h4><span class="w">核心 · 中</span></div>
+        <p>帮老师发任务、批改、答疑——和助学一起构成<b>师生闭环</b>的另一半。</p>
+      </div>
+      <div class="assist">
+        <div class="top"><h4>助研</h4><span class="w heavy">重</span></div>
+        <p>科研知识库 + 论文写作辅助，复用同一套 KB 引擎。</p>
+      </div>
+      <div class="assist">
+        <div class="top"><h4>助管</h4><span class="w">薄 · 单点</span></div>
+        <p>全局学情看板 + 挂科预警，先做一个核心功能立住。</p>
+      </div>
+      <div class="assist">
+        <div class="top"><h4>国际交流</h4><span class="w">薄 · 单点</span></div>
+        <p>留学 / 交换项目问答，同样先做一个核心功能。</p>
+      </div>
+      <div class="assist" style="background:var(--surface-2);border-style:dashed">
+        <div class="top"><h4 style="color:var(--muted)">核心闭环</h4></div>
+        <p><b>助学 ↔ 助教</b>＝「超星学习通的 AI 版」：老师发任务 → 学生完成 → 全程嵌 AI。</p>
+      </div>
+    </div>
+
+    <div class="chapter-next" data-reveal>
+      <a class="next-btn" href="05-nju.html">往下读 · 南大 · 我们的起点 →</a>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{threshold:0.1});
+  document.querySelectorAll('[data-reveal]').forEach(function(el){ obs.observe(el); });
+})();
+</script>
+</body>
+</html>

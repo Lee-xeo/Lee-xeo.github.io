@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>业务全景 — 一个方向，两条路</title>
+<meta name="description" content="把「学习」用大模型重做一遍：to-C 替代型 Vibe Learning 与 to-B 增强型多角色教学平台，共用同一支团队与一套认知引擎。" />
+<style>
+:root{
+  --bg:#faf7f2;--bg-2:#f2ede4;--surface:#fffdfa;--surface-2:#f6f1e9;
+  --border:rgba(64,50,36,.13);--border-strong:rgba(64,50,36,.22);
+  --text:#2b2622;--muted:#6f665c;--muted-2:#9b9286;
+  --clay:#c15f3c;--clay-2:#a64a2c;--clay-bright:#d97757;--clay-soft:#f4e7df;
+  --gold:#bd8b3a;--gold-2:#9a6f27;--gold-soft:rgba(189,139,58,.10);
+  --serif:"Songti SC","STSong","Noto Serif SC",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+  --maxw:1000px;--topbar-h:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(1100px 620px at 80% -12%,rgba(217,119,87,.10),transparent 62%),
+  radial-gradient(900px 560px at 4% 2%,rgba(189,139,58,.07),transparent 58%),
+  linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;width:100%}
+.page-main{padding-top:calc(var(--topbar-h) + 52px);padding-bottom:80px}
+@media(max-width:640px){.page-main{padding-top:calc(var(--topbar-h) + 32px)}}
+
+/* one chapter at a time */
+.chapter{display:none}
+.chapter.active{display:flex;flex-direction:column;min-height:100vh}
+.chapter.active > .wrap{margin:auto;min-width:0}
+
+/* type */
+h1.title{font-family:var(--serif);font-size:clamp(33px,5vw,54px);line-height:1.14;letter-spacing:-.01em;font-weight:700;margin-bottom:22px}
+h2.title{font-family:var(--serif);font-size:clamp(26px,3.9vw,40px);line-height:1.2;letter-spacing:-.01em;font-weight:700;margin-bottom:16px}
+h3.sub{font-family:var(--serif);font-size:clamp(19px,2.5vw,25px);font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.lede{color:var(--muted);font-size:clamp(15px,1.7vw,18px);max-width:66ch}
+.lede+.lede{margin-top:14px}
+.lede b{color:var(--text);font-weight:650}
+.accent{color:var(--clay)}
+.accent-g{color:var(--gold-2)}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--clay);
+  display:inline-flex;align-items:center;gap:9px;margin-bottom:18px;text-transform:uppercase}
+.eyebrow::before{content:"";width:24px;height:1px;background:var(--clay);opacity:.65}
+.section-kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--clay);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.section-kicker::before{content:"";width:16px;height:1.5px;background:currentColor;opacity:.7}
+.block{margin-top:48px}
+.link{color:var(--clay);text-decoration:none;border-bottom:1px solid rgba(193,95,60,.4);transition:color .2s,border-color .2s}
+.link:hover{color:var(--clay-2);border-color:var(--clay-2)}
+.badge{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+  color:var(--clay);background:var(--clay-soft);border:1px solid var(--border-strong);
+  padding:7px 14px;border-radius:999px;margin-bottom:24px}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--clay-bright);box-shadow:0 0 9px rgba(217,119,87,.7);animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.meta-row{display:flex;gap:10px 22px;flex-wrap:wrap;font-size:13.5px;color:var(--muted-2);font-family:var(--mono);margin-top:26px}
+.meta-row span{display:inline-flex;align-items:center;gap:7px}
+.meta-row span::before{content:"◆";color:var(--clay-bright);font-size:9px}
+
+/* ── 叙事节拍（ch3） ── */
+.beat{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
+.beat .k{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--clay);line-height:1.15;padding-top:2px;white-space:nowrap}
+.beat p{color:var(--muted);font-size:16px;max-width:64ch}
+.beat p b{color:var(--text);font-weight:650}
+.beat p+p{margin-top:12px}
+.beat ul{padding-left:18px;margin:10px 0 0}
+.beat ul li{margin-top:10px;color:var(--muted);font-size:15.5px;line-height:1.65}
+.beat ul li .arr{color:var(--clay);margin:0 4px}
+.story{margin-top:36px;display:flex;flex-direction:column;gap:34px}
+@media(max-width:560px){.beat{grid-template-columns:1fr;gap:8px}.beat .k{font-size:20px}}
+
+.quote{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--clay-bright);
+  border-radius:12px;padding:20px 24px;margin-top:24px;box-shadow:0 1px 3px rgba(70,50,30,.05);max-width:64ch}
+.quote p{color:var(--text);font-size:16px;line-height:1.75}
+.quote .src{font-family:var(--mono);font-size:12.5px;color:var(--muted-2);margin-top:10px}
+
+/* ── 双轨对照卡（ch2） ── */
+.split2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
+@media(max-width:720px){.split2{grid-template-columns:1fr}}
+.track{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:28px 26px 26px;box-shadow:0 1px 3px rgba(70,50,30,.05);
+  transition:transform .25s,border-color .25s,box-shadow .25s}
+.track:hover{transform:translateY(-3px);border-color:var(--border-strong);box-shadow:0 14px 36px rgba(80,55,30,.10)}
+.track.c{border-top:3px solid var(--clay)}
+.track.b{border-top:3px solid var(--gold)}
+.track-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:700;
+  padding:4px 11px;border-radius:999px;text-transform:uppercase;display:inline-block;margin-bottom:14px}
+.track.c .track-tag{background:var(--clay-soft);color:var(--clay);border:1px solid rgba(193,95,60,.3)}
+.track.b .track-tag{background:var(--gold-soft);color:var(--gold-2);border:1px solid rgba(189,139,58,.35)}
+.track h3{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:2px}
+.track .role{font-family:var(--mono);font-size:12.5px;color:var(--muted-2);margin-bottom:18px}
+.track-section+.track-section{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.track-label{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  margin-bottom:8px;display:inline-flex;align-items:center;gap:8px}
+.track-label::before{content:'';display:inline-block;width:12px;height:1.5px;background:currentColor;opacity:.7;flex-shrink:0}
+.track.c .track-label{color:var(--clay)}
+.track.b .track-label{color:var(--gold-2)}
+.track ul{list-style:none;padding:0;margin:0}
+.track ul li{position:relative;padding-left:18px;margin-top:9px;color:var(--muted);font-size:14px;line-height:1.65}
+.track ul li::before{content:"—";position:absolute;left:0;color:var(--clay);font-size:12px;top:2px}
+.track.b ul li::before{color:var(--gold-2)}
+.track ul li b{color:var(--text);font-weight:650}
+.vs{text-align:center;font-family:var(--serif);color:var(--muted-2);font-size:15px;margin-top:24px}
+.vs b{color:var(--text)}
+
+/* ── 五助卡片（ch4） ── */
+.assist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+@media(max-width:760px){.assist-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.assist-grid{grid-template-columns:1fr}}
+.assist{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;
+  box-shadow:0 1px 3px rgba(70,50,30,.05);position:relative}
+.assist.core{border-left:3px solid var(--clay)}
+.assist .top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+.assist h4{font-family:var(--serif);font-size:18px;font-weight:700}
+.assist .w{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;padding:2px 8px;border-radius:999px;
+  color:var(--muted-2);background:var(--surface-2);border:1px solid var(--border);white-space:nowrap}
+.assist .w.heavy{color:var(--clay);background:var(--clay-soft);border-color:rgba(193,95,60,.3)}
+.assist p{color:var(--muted);font-size:14px;line-height:1.62}
+
+/* ── 卡片基座：ch5 初始条件 + ch6 内循环共用 ── */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+@media(max-width:700px){.duo{grid-template-columns:1fr}}
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;
+  box-shadow:0 1px 3px rgba(70,50,30,.05);transition:transform .25s,border-color .25s,box-shadow .25s}
+.pcard:hover{transform:translateY(-3px);border-color:var(--border-strong);box-shadow:0 14px 36px rgba(80,55,30,.10)}
+.pcard.b{border-top:3px solid var(--gold)}
+.pcard.c{border-top:3px solid var(--clay)}
+.pcard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:700;text-transform:uppercase;
+  padding:4px 11px;border-radius:999px;display:inline-block;margin-bottom:12px}
+.pcard.b .tag{background:var(--gold-soft);color:var(--gold-2);border:1px solid rgba(189,139,58,.35)}
+.pcard.c .tag{background:var(--clay-soft);color:var(--clay);border:1px solid rgba(193,95,60,.3)}
+.pcard h4{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:6px}
+.pcard .posi{font-size:14.5px;color:var(--muted);margin-bottom:14px;line-height:1.55}
+.pcard .posi b{color:var(--text);font-weight:650}
+/* ch5 变体：初始条件（清单式） */
+.nju .pcard h4{margin-bottom:8px}
+.nju .pcard .posi{color:var(--text);font-weight:650;font-size:15px;line-height:1.5}
+.nju .pcard ul{list-style:none;padding:0;margin:0}
+.nju .pcard li{position:relative;padding-left:18px;margin-top:9px;color:var(--muted);font-size:14px;line-height:1.6}
+.nju .pcard li::before{content:"—";position:absolute;left:0;top:1px}
+.nju .pcard.b li::before{color:var(--gold-2)}
+.nju .pcard.c li::before{color:var(--clay)}
+.nju .pcard li b{color:var(--text);font-weight:650}
+
+/* 通用 chip 流（ch6 飞轮 / 多米诺） */
+.chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.chip{font-family:var(--mono);font-size:12px;color:var(--text);background:var(--surface-2);
+  border:1px solid var(--border);border-radius:999px;padding:7px 12px;line-height:1.2}
+.chip-arr{font-family:var(--mono);font-size:13px}
+.pcard.b .chip-arr{color:var(--gold-2)}
+.pcard.c .chip-arr{color:var(--clay)}
+.loop-tag{flex-basis:100%;font-family:var(--mono);font-size:12px;margin-top:10px;display:flex;align-items:center;gap:7px}
+.pcard.b .loop-tag{color:var(--gold-2)}
+.pcard.c .loop-tag{color:var(--clay)}
+
+/* ── 原则 callout（ch6） ── */
+.principle{margin-top:24px;background:linear-gradient(135deg,var(--clay-soft),rgba(189,139,58,.10));
+  border:1px solid var(--border-strong);border-radius:18px;padding:26px 28px}
+.principle .big{font-family:var(--serif);font-size:clamp(20px,2.8vw,26px);font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.principle .big .accent{color:var(--clay)}
+.principle p{color:var(--muted);font-size:15px;line-height:1.7;max-width:70ch}
+.principle p b{color:var(--text);font-weight:650}
+
+/* ── 理想曲线图（ch6） ── */
+.chart-legend{display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:11.5px;color:var(--muted-2);margin-top:12px}
+.chart-legend .k{display:inline-flex;align-items:center;gap:7px}
+.chart-legend .sw{width:22px;border-top:2px solid var(--muted-2)}
+.chart-legend .sw.dash{border-top-style:dashed}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:700px){.charts{grid-template-columns:1fr}}
+.chartcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px 20px;
+  box-shadow:0 1px 3px rgba(70,50,30,.05)}
+.chartcard.b{border-top:3px solid var(--gold)}
+.chartcard.c{border-top:3px solid var(--clay)}
+.chartcard h4{font-family:var(--serif);font-size:18px;font-weight:700;margin-bottom:6px}
+.chart-svg{width:100%;height:auto;display:block;font-family:var(--mono)}
+.chartcard .cap{color:var(--muted);font-size:13.5px;line-height:1.6;margin-top:8px}
+.chartcard .cap b{color:var(--text);font-weight:650}
+.charts-note{margin-top:16px;color:var(--muted);font-size:14.5px;line-height:1.65;
+  background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px 18px}
+.charts-note b{color:var(--text);font-weight:650}
+
+/* ── 外循环 · 储蓄账户（ch6） ── */
+.savings{display:grid;grid-template-columns:1fr auto 1.25fr auto 1fr;gap:12px;align-items:stretch;margin-top:22px}
+@media(max-width:760px){.savings{grid-template-columns:1fr;gap:10px}}
+.sav-node{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;
+  display:flex;flex-direction:column;justify-content:center;box-shadow:0 1px 3px rgba(70,50,30,.05)}
+.sav-node.b{border-top:3px solid var(--gold)}
+.sav-node.c{border-top:3px solid var(--clay)}
+.sav-node b{font-size:15px}
+.sav-node small{display:block;color:var(--muted-2);font-family:var(--mono);font-size:11px;margin-top:6px;line-height:1.4}
+.sav-core{background:linear-gradient(135deg,var(--clay-soft),rgba(189,139,58,.12));border:1px solid var(--border-strong);
+  border-radius:14px;padding:18px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.sav-core .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--clay);text-transform:uppercase;margin-bottom:6px}
+.sav-core b{font-family:var(--serif);font-size:17px;font-weight:700;line-height:1.35}
+.sav-link{display:flex;align-items:center;justify-content:center;color:var(--muted-2);font-size:20px;font-family:var(--mono)}
+@media(max-width:760px){.sav-link{transform:rotate(90deg)}}
+.sav-note{margin-top:14px;color:var(--muted);font-size:14px;line-height:1.65;max-width:70ch}
+.sav-note b{color:var(--text);font-weight:650}
+
+/* ── 单向输送（ch6） ── */
+.transfer{margin-top:20px;display:flex;flex-direction:column;gap:12px}
+.tr-row{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;
+  display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;box-shadow:0 1px 3px rgba(70,50,30,.05)}
+@media(max-width:560px){.tr-row{grid-template-columns:1fr;gap:8px}}
+.tr-dir{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.03em;white-space:nowrap;
+  padding:6px 12px;border-radius:999px;text-align:center}
+.tr-row.bc .tr-dir{background:var(--gold-soft);color:var(--gold-2);border:1px solid rgba(189,139,58,.35)}
+.tr-row.cb .tr-dir{background:var(--clay-soft);color:var(--clay);border:1px solid rgba(193,95,60,.3)}
+.tr-row p{color:var(--muted);font-size:14.5px;line-height:1.6}
+.tr-row p b{color:var(--text);font-weight:650}
+.ironclad{margin-top:16px;font-family:var(--mono);font-size:13px;color:var(--clay);display:flex;align-items:center;gap:9px}
+.ironclad::before{content:"⛨";font-size:15px}
+
+/* ── 南大 · 起点（ch5） ── */
+.launch-note{margin-top:20px;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--clay-bright);
+  border-radius:12px;padding:18px 22px}
+.launch-note p{color:var(--text);font-size:15.5px;line-height:1.7}
+.launch-note b{font-weight:700}
+.launch-note .em{color:var(--clay)}
+.endorse{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 26px;margin-top:22px;box-shadow:0 1px 3px rgba(70,50,30,.05)}
+.endorse p{color:var(--muted);font-size:15.5px;line-height:1.7;max-width:70ch}
+.endorse p b{color:var(--text);font-weight:650}
+.endorse .stamp{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.04em;color:var(--gold-2);background:var(--gold-soft);border:1px solid rgba(189,139,58,.35);
+  border-radius:999px;padding:5px 12px;margin-bottom:14px}
+.doc-shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.doc-shots .shot.wide{grid-column:1 / -1}
+@media(max-width:640px){.doc-shots{grid-template-columns:1fr}}
+.shot{margin:0;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px;
+  box-shadow:0 1px 3px rgba(70,50,30,.05)}
+.shot img{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--border);background:#fff}
+.shot figcaption{font-family:var(--mono);font-size:11.5px;color:var(--muted-2);margin-top:9px;text-align:center;line-height:1.45}
+.shot.key figcaption{color:var(--clay);font-weight:600}
+
+/* ── 时间线 · 分叉点之前（ch7 共享主干） ── */
+.shared{margin-top:30px;display:flex;flex-direction:column;align-items:center}
+.s-item{display:flex;flex-direction:column;align-items:center;width:100%;max-width:480px}
+.s-stem{width:2px;height:18px;background:var(--border-strong);opacity:.55}
+.s-dot{width:13px;height:13px;border-radius:50%;background:var(--surface);border:2px solid var(--muted-2);flex-shrink:0}
+.s-card{width:100%;margin-top:11px;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:14px;padding:14px 18px;text-align:center}
+.s-card .done{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--muted-2);
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px 11px;display:inline-block;margin-bottom:8px}
+.s-card h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.s-card p{color:var(--muted);font-size:13.6px;line-height:1.58}
+.s-card p b{color:var(--text);font-weight:650}
+.s-item.now .s-dot{width:16px;height:16px;background:var(--clay);border-color:var(--clay);box-shadow:0 0 0 4px var(--clay-soft)}
+.s-item.now .s-card{background:linear-gradient(135deg,var(--clay-soft),var(--gold-soft));border-color:var(--border-strong);box-shadow:0 8px 24px rgba(80,55,30,.09)}
+.s-item.now .done{color:var(--clay);background:var(--surface);border-color:rgba(193,95,60,.35)}
+.s-item.now .s-card h4{font-family:var(--serif);font-size:18px}
+
+/* ── 分叉桥 + 两侧时间轴（ch7） ── */
+.diverge{position:relative;height:40px}
+.diverge .dn{position:absolute;left:calc(50% - 1px);top:0;width:2px;height:15px;background:var(--border-strong)}
+.diverge .arc{position:absolute;left:6px;right:6px;top:15px;height:25px;
+  border:2px solid var(--border-strong);border-bottom:none;border-radius:24px 24px 0 0}
+.twoside{position:relative;display:grid;grid-template-columns:1fr 1fr;column-gap:44px}
+.twoside::before{content:"";position:absolute;left:50%;top:0;bottom:26px;width:1px;background:var(--border-strong);opacity:.5}
+.side{display:flex;flex-direction:column;min-width:0}
+.side-head{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:6px 14px;margin-bottom:6px}
+.side.b .side-head{color:var(--gold-2);background:var(--gold-soft);border:1px solid var(--gold);align-self:flex-start}
+.side.c .side-head{color:var(--clay);background:var(--clay-soft);border:1px solid var(--clay);align-self:flex-end}
+.trow{display:grid;gap:15px}
+.side.b .trow{grid-template-columns:auto 1fr}
+.side.c .trow{grid-template-columns:1fr auto}
+.side.c .trail{order:2}
+.trail{display:flex;flex-direction:column;align-items:center}
+.tdot{width:14px;height:14px;border-radius:50%;background:var(--surface);margin-top:4px;flex-shrink:0}
+.tline{flex:1;width:2px;margin-top:5px}
+.side.b .tdot{border:2px solid var(--gold)}
+.side.b .tline{background:var(--gold);opacity:.5}
+.side.c .tdot{border:2px solid var(--clay)}
+.side.c .tline{background:var(--clay);opacity:.5}
+.side.b .trow.key .tdot{background:var(--gold);box-shadow:0 0 0 4px var(--gold-soft)}
+.side.c .trow.key .tdot{background:var(--clay);box-shadow:0 0 0 4px var(--clay-soft)}
+.tbody{padding-bottom:24px;min-width:0}
+.side.c .tbody{text-align:right}
+.side.b .trow.key .tbody,.side.c .trow.key .tbody{background:var(--surface);border:1px solid var(--border-strong);
+  border-radius:14px;padding:15px 17px;box-shadow:0 8px 22px rgba(80,55,30,.08)}
+.side.b .trow.key .tbody{border-top:3px solid var(--gold)}
+.side.c .trow.key .tbody{border-top:3px solid var(--clay)}
+.t-when{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.side.b .t-when{color:var(--gold-2)}
+.side.c .t-when{color:var(--clay)}
+.tbody h4{font-size:15.5px;font-weight:700;margin-bottom:4px;line-height:1.35}
+.tbody p{color:var(--muted);font-size:13.8px;line-height:1.6}
+.tbody p b{color:var(--text);font-weight:650}
+.t-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.side.c .t-tags{justify-content:flex-end}
+.t-tags span{font-family:var(--mono);font-size:10.5px;padding:4px 10px;border-radius:999px;border:1px solid}
+.side.b .t-tags span{color:var(--gold-2);background:var(--gold-soft);border-color:var(--gold)}
+.side.c .t-tags span{color:var(--clay);background:var(--clay-soft);border-color:var(--clay)}
+@media(max-width:640px){
+  .twoside{grid-template-columns:1fr;column-gap:0}
+  .twoside::before{display:none}
+  .diverge{display:none}
+  .side{margin-top:22px}
+  .side.c .trow{grid-template-columns:auto 1fr}
+  .side.c .trail{order:0}
+  .side.c .tbody{text-align:left}
+  .side.c .t-tags{justify-content:flex-start}
+  .side.c .side-head{align-self:flex-start}
+}
+
+/* note list */
+.note-list{margin-top:40px;color:var(--muted);font-size:14.5px;line-height:1.75;padding-left:18px;list-style:disc}
+.note-list li{margin-top:8px}
+.note-list li b{color:var(--text);font-weight:650}
+
+/* cta */
+.cta{background:linear-gradient(135deg,var(--clay-soft),rgba(189,139,58,.10));
+  border:1px solid var(--border-strong);border-radius:22px;padding:54px 40px;text-align:center;margin-top:36px;position:relative;overflow:hidden}
+.cta h2{font-family:var(--serif);font-size:clamp(25px,4.2vw,38px);font-weight:700;letter-spacing:-.01em;margin-bottom:16px}
+.cta p{color:var(--muted);font-size:17px;max-width:58ch;margin:0 auto;line-height:1.75}
+.cta p+p{margin-top:12px}
+.cta p b{color:var(--text)}
+.cta small{display:block;margin-top:24px;color:var(--muted-2);font-size:13.5px;font-family:var(--mono)}
+.end-foot{margin-top:32px;text-align:center;color:var(--muted-2);font-size:13px;font-family:var(--mono)}
+
+/* topbar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 26px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  background:rgba(250,247,242,.8);border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:14px;letter-spacing:.01em;line-height:1.15;flex-shrink:0}
+.mark{width:27px;height:27px;flex-shrink:0;border-radius:8px;background:var(--clay);display:grid;place-items:center;
+  font-family:var(--serif);font-weight:700;font-size:15px;color:#fff;box-shadow:0 3px 12px rgba(193,95,60,.4)}
+.brand small{color:var(--muted-2);font-weight:500}
+.dots{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.dot-btn{font-family:var(--mono);font-size:12px;color:var(--muted-2);background:var(--surface);border:1px solid var(--border);
+  border-radius:999px;padding:6px 11px;cursor:pointer;line-height:1;
+  transition:color .2s,background .2s,border-color .2s,box-shadow .2s}
+.dot-btn:hover{color:var(--text);border-color:var(--border-strong)}
+.dot-btn.on{color:#fff;background:var(--clay);border-color:transparent;box-shadow:0 3px 12px rgba(193,95,60,.32)}
+@media(max-width:640px){.topbar{padding:0 12px;gap:10px}.brand small{display:none}.brand .bl{display:none}
+  .dots{gap:5px}.dot-btn{padding:5px 8px;font-size:11px}}
+
+/* progress bar */
+.progress{position:fixed;top:var(--topbar-h);left:0;right:0;height:3px;background:rgba(64,50,36,.08);z-index:59}
+.progress>i{display:block;height:100%;width:0;background:var(--clay-bright);transition:width .4s cubic-bezier(.4,.2,.2,1)}
+
+/* chapter nav */
+.chapter-next{margin-top:72px;padding-top:32px;border-top:1px solid var(--border);text-align:center}
+.next-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;
+  letter-spacing:.04em;color:var(--clay);text-decoration:none;background:transparent;cursor:pointer;
+  border:1px solid rgba(193,95,60,.35);border-radius:999px;padding:9px 20px;
+  transition:background .2s,border-color .2s,transform .18s}
+.next-btn:hover{background:var(--clay-soft);border-color:var(--clay);transform:translateY(-1px)}
+.back-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  background:transparent;border:1px solid var(--border);border-radius:16px;padding:16px 32px;
+  text-decoration:none;color:var(--muted-2);font-family:var(--mono);font-size:13px;cursor:pointer;
+  transition:color .2s,border-color .2s}
+.back-btn:hover{color:var(--clay);border-color:var(--clay)}
+
+/* reveal */
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+[data-reveal].in{opacity:1;transform:none}
+[data-reveal][data-d="1"]{transition-delay:.08s}
+[data-reveal][data-d="2"]{transition-delay:.16s}
+[data-reveal][data-d="3"]{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}[data-reveal]{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="mark">L</span>
+    <span>NJU&#8209;LINK LAB<br class="bl"><small>南京大学 · AI 教育团队</small></span>
+  </div>
+  <nav class="dots" id="dots" aria-label="章节导航">
+    <button class="dot-btn on" data-goto="0" title="业务全景">01</button>
+    <button class="dot-btn" data-goto="1" title="一个方向，两条路">02</button>
+    <button class="dot-btn" data-goto="2" title="to-C · Vibe Learning">03</button>
+    <button class="dot-btn" data-goto="3" title="to-B · 多角色平台">04</button>
+    <button class="dot-btn" data-goto="4" title="南大 · 起点">05</button>
+    <button class="dot-btn" data-goto="5" title="两端交互">06</button>
+    <button class="dot-btn" data-goto="6" title="时间线 · 里程碑">07</button>
+  </nav>
+</header>
+<div class="progress"><i id="progressBar"></i></div>
+
+<main>
+
+  <!-- ① 业务全景 -->
+  <section class="chapter page-main active">
+    <div class="wrap">
+      <div class="badge" data-reveal><span class="dot"></span>团队内部 BP</div>
+      <h1 class="title" data-reveal data-d="1">我们到底在做<span class="accent">一门什么样的生意</span></h1>
+      <p class="lede" style="margin-top:14px" data-reveal data-d="2">总的来说，我们有两条业务线：<b>C 端</b> 和 <b>B 端</b>。它们的客户不同、产品形态不同、商业模式不同，但底层的开发逻辑和团队本身是共享的。</p>
+      <p class="lede" style="margin-top:14px" data-reveal data-d="2">以下信息涉及到团队内部信息，还请您<b>不要随意转发、传播或在公共平台讨论</b>，非常感谢。</p>
+
+      <div class="meta-row" data-reveal data-d="3">
+        <span>两条产品线</span>
+        <span>一套认知引擎</span>
+        <span>增强 · 与 · 替代</span>
+      </div>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="1">往下读 · 一个方向，两条路 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 一个方向，两条路 -->
+  <section class="chapter page-main">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>核心图景</div>
+      <h2 class="title" data-reveal data-d="1">一个方向，<span class="accent">两条路</span></h2>
+      <p class="lede" data-reveal data-d="1">两条路线核心的分叉点在于：<b>体系内</b>和<b>体系外</b>，<b>单角色</b>和<b>多角色</b>；<b>辅助</b>与<b>变革</b>。这决定了两条产品线长成完全不同的样子。</p>
+
+      <div class="split2" data-reveal data-d="2">
+
+        <!-- to-C -->
+        <div class="track c">
+          <span class="track-tag">to-C · 体系外的变革</span>
+          <h3>Vibe Learning</h3>
+          <div class="role">单角色 · 自学的学生</div>
+
+          <div class="track-section">
+            <div class="track-label">核心痛点</div>
+            <ul>
+              <li>学生学习意愿高，但缺少<b>「良师」</b>引路，缺少系统性方法。</li>
+              <li>传统大班教学难以顾及<b>个人差异</b>，小班教学成本高昂。</li>
+              <li>名师服务是稀缺资源，难以被<b>复制和共享</b>。</li>
+            </ul>
+          </div>
+
+          <div class="track-section">
+            <div class="track-label">我的判断</div>
+            <ul>
+              <li>天赋固然重要，但<b>有人指路</b>对大多数人更关键。</li>
+              <li>学习无聊、痛苦、高压是传统教学方法造成的，不是<b>学习本身</b>的错。</li>
+              <li>AI 是唯一能带来<b>高效普惠</b>个性化教育的技术。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- to-B -->
+        <div class="track b">
+          <span class="track-tag">to-B · 体系内的升级</span>
+          <h3>多角色教学平台</h3>
+          <div class="role">多角色 · 学生 / 教师 / 管理</div>
+
+          <div class="track-section">
+            <div class="track-label">核心痛点</div>
+            <ul>
+              <li>政策鼓励高校拥抱 AI 赋能教育，但学校内部缺少承接的专门团队。</li>
+              <li>体系天生有惰性，难以主动跟上 AI 浪潮。</li>
+              <li>缺乏有效机制整合 AI 技术，实质提升教学效果。</li>
+            </ul>
+          </div>
+
+          <div class="track-section">
+            <div class="track-label">我的判断</div>
+            <ul>
+              <li>体系内不需要变革，要的是<b>赋能和升级</b>。</li>
+              <li>B 端产品天然易于同质化，可以提供低成本克隆的<b>一站式解决方案</b>。</li>
+              <li>背靠南大，我们已经有了<b>第一个起点</b>。</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="vs" data-reveal data-d="3">两条业务线产品 IP 天然隔离，底层沉淀<b>同一个团队和开发流程</b>。</p>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="2">往下读 · to-C · Vibe Learning →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ to-C · Vibe Learning -->
+  <section class="chapter page-main">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>产品线一 · to-C</div>
+      <h2 class="title" data-reveal data-d="1">Vibe Learning —— <span class="accent">跟着感觉推进学习</span></h2>
+      <p class="lede" data-reveal data-d="1">先说清定位：C 端业务线目前更多是我们的<b>判断与蓝图</b>，走的前沿理念。C 端业务真的开始盈利需要原始积累、运营和销售，所以落地会排在 to-B 稳住现金流之后——但它才是我们真正想改变世界的那一面。</p>
+
+      <div class="story">
+        <div class="beat" data-reveal>
+          <div class="k">需求</div>
+          <div>
+            <h3 class="sub">学生的需求其实很简单，也很复杂</h3>
+            <p>谁都想学会知识，但谁都明白学会不容易。但是到底为什么不容易？尝试直面痛点：</p>
+              <ul>
+                <li>教材写得很好，但我看不懂/看不进去。<span class="arr">→</span><b>写书做课的人的认知逻辑和我并不匹配</b></li>
+                <li>我不知道我为什么不会，我不知道该怎么做。<span class="arr">→</span><b>没人能帮助我，因为不了解我</b></li>
+                <li>我喜欢在练习中学习/我不喜欢听课/我喜欢做笔记/我不擅长...<span class="arr">→</span><b>个性化学习习惯</b></li>
+              </ul>
+          </div>
+        </div>
+
+        <div class="beat" data-reveal>
+          <div class="k">方案</div>
+          <div>
+            <h3 class="sub">我们追求实现 Vibe Learning 这个概念形态</h3>
+            <p>整条产品只服务一个人——<b>使用产品进行学习学生</b>。AI 通过构造任务、建模认知，个性化画像，长程监管，帮助学生进入学习的心流。AI 的最大作用是让不会学习的学生"被动"得会学，让学习变得更自然而然，所以我们叫它 <b>Vibe Learning</b>。</p>
+          </div>
+        </div>
+
+        <div class="beat" data-reveal>
+          <div class="k">护城河</div>
+          <div>
+            <h3 class="sub">理念 + 技术</h3>
+            <p>做 To C 业务的核心在于将先进的 AI 技术与教育理念相结合，形成独特的竞争优势。因此产品组成员必须对学习方法和教育理念具有深刻的自我认识。我们认为，<b>学习效率曲线的转折点就发生在学生掌握自身个性化学习方法的时刻</b>：不知你是否曾有过自主学习的顿悟时刻，领悟出适合自己的学习方法，如果有，那我们就是想让每个学生都尽早获得这种认识，从而不再让对学习方法的理解成为壁垒。</p>
+            <p>在现阶段，我们的首要护城河是<b>理念</b>，因为岗位需求画像的产品侧优先级更大于技术侧。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="3">往下读 · to-B · 多角色平台 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ to-B · 多角色教学平台 -->
+  <section class="chapter page-main">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>产品线二 · to-B</div>
+      <h2 class="title" data-reveal data-d="1">多角色教学平台 —— <span class="accent-g">增强与赋能</span></h2>
+      <p class="lede" data-reveal data-d="1">这是我们<b>当下正在落地</b>的产品线，也是团队的第一个试炼场。教学系统内的 B 端客户需要的是一个工具性平台——让<b>学生、老师、教务等</b>各自的工作都被 AI 辅助提效。</p>
+      <p class="lede" style="margin-top:14px" data-reveal data-d="2">我们把平台拆成<b>五个「助」</b>的业务线：助学、助教、助研、助管、国际交流。它们共用同一套底层，但各自面向不同角色、深浅不同。</p>
+      <p class="lede" style="margin-top:14px" data-reveal data-d="2">作为有产品追求的团队，我们想做的不是交差走人，而是一个<b>真正好用的自研原生教学平台</b>——这需要高品位的产品设计和够硬的技术支撑。</p>
+
+      <div class="assist-grid" data-reveal data-d="2">
+        <div class="assist core">
+          <div class="top"><h4>助学</h4><span class="w heavy">核心 · 重</span></div>
+          <p>给学生「轻引导式教学」。注意：这里<b>刻意不做 Vibe</b>，走的是轻引导，而非替代。</p>
+        </div>
+        <div class="assist core">
+          <div class="top"><h4>助教</h4><span class="w">核心 · 中</span></div>
+          <p>帮老师发任务、批改、答疑——和助学一起构成<b>师生闭环</b>的另一半。</p>
+        </div>
+        <div class="assist">
+          <div class="top"><h4>助研</h4><span class="w heavy">重</span></div>
+          <p>科研知识库 + 论文写作辅助，复用同一套 KB 引擎。</p>
+        </div>
+        <div class="assist">
+          <div class="top"><h4>助管</h4><span class="w">薄 · 单点</span></div>
+          <p>全局学情看板 + 挂科预警，先做一个核心功能立住。</p>
+        </div>
+        <div class="assist">
+          <div class="top"><h4>国际交流</h4><span class="w">薄 · 单点</span></div>
+          <p>留学 / 交换项目问答，同样先做一个核心功能。</p>
+        </div>
+        <div class="assist" style="background:var(--surface-2);border-style:dashed">
+          <div class="top"><h4 style="color:var(--muted)">核心闭环</h4></div>
+          <p><b>助学 ↔ 助教</b>＝「超星学习通的 AI 版」：老师发任务 → 学生完成 → 全程嵌 AI。</p>
+        </div>
+      </div>
+
+      <div class="quote" data-reveal>
+        <p>最有意思的一点：B 端用户<b>根本感觉不到</b> Vibe、也感觉不到背后的认知图——但引擎在后台照常运转。</p>
+        <div class="src">引擎在场，体验隐身——同一套底层，能长出两种完全不同的产品。</div>
+      </div>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="4">往下读 · 南大 · 我们的起点 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ 南大 · 我们的起点 -->
+  <section class="chapter page-main nju">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>我们的起点 · 南京大学</div>
+      <h2 class="title" data-reveal data-d="1">B 端的已有起点：一切从南大这个<span class="accent">土壤</span>开始</h2>
+      <p class="lede" data-reveal data-d="1">我们是一支<b>南大内部的学生团队</b>，在南大有先天优势和现有支持。就以现状可控的未来来说：校方<b>出资</b>、<b>约束少</b>、还有<b>现成的师生团队</b>。B 端和 C 端，都在这里拿到各自的「初始条件」。</p>
+
+      <!-- 两条线的初始条件 -->
+      <div class="block" data-reveal>
+        <div class="section-kicker">初始条件</div>
+        <h3 class="sub">同一个校园，给两条线各发一手好牌</h3>
+        <div class="duo">
+          <div class="pcard b">
+            <span class="tag">to-B · 第一个平台</span>
+            <h4>成熟方案的最佳靶场</h4>
+            <p class="posi">校方出资、限制少、自由发挥——理想的第一块试验田。</p>
+            <ul>
+              <li>用南大项目打磨出一套<b>成熟 B 端方案的「母版」</b></li>
+              <li>日后扩到别的学校，本质是<b>换 IP、换壳复制</b></li>
+              <li>在约束最少的南大做这个母版，成本最低</li>
+            </ul>
+          </div>
+          <div class="pcard c">
+            <span class="tag">to-C · 天然试验田</span>
+            <h4>现成的第一批测试用户</h4>
+            <p class="posi">不用从零找人，校园里就有真实的学习者。</p>
+            <ul>
+              <li>老师<b>自己开的课</b>，天然的试点场景</li>
+              <li>校内<b>考研 / 雅思 / 四六级</b>等刚需人群</li>
+              <li>C 端产品的冷启动，一开始就有真人可跑</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="launch-note" data-reveal>
+          <p>要说清楚的是：南大是一片<b class="em">格外肥沃的土壤</b>——给养分、给门、给第一批用户。但它只是<b>起点，不是循环本身</b>：种子能不能长成大树、自己开枝散叶，靠的是后面两条线各自转起来的「循环」。</p>
+        </div>
+      </div>
+
+      <!-- 官方背书 -->
+      <div class="block" data-reveal>
+        <div class="section-kicker">官方背书</div>
+        <h3 class="sub">这个起点是已经<span class="accent">盖了章</span>的</h3>
+        <div class="endorse">
+          <span class="stamp">教育部 · 教科信司〔2025〕65 号</span>
+          <p>2025 年 9 月，<b>教育部科学技术与信息化司</b>公布首批「生成式人工智能教育专用大模型建设项目」遴选结果。<b>南京大学</b>的「计算机学科教育专用大模型」项目入选，评审结果为 <b>推荐</b>。</p>
+          <p style="margin-top:10px">换句话说，我们要做的这件事，不只是团队自己的判断——它站在一个<b>被国家级遴选认可</b>的项目之上。</p>
+
+          <div class="doc-shots" data-reveal>
+            <figure class="shot">
+              <img src="assets/nju-doc-01.png" alt="教育部关于首批生成式人工智能教育专用大模型建设项目遴选结果的通知" loading="lazy" />
+              <figcaption>① 教育部司局函件 · 遴选结果通知</figcaption>
+            </figure>
+            <figure class="shot">
+              <img src="assets/nju-doc-02.png" alt="教育部科学技术与信息化司用印页" loading="lazy" />
+              <figcaption>② 用印与落款 · 2025.09.15</figcaption>
+            </figure>
+            <figure class="shot key wide">
+              <img src="assets/nju-doc-03.png" alt="立项清单：南京大学计算机学科教育专用大模型，评审结果推荐" loading="lazy" />
+              <figcaption>③ 立项清单 · 南京大学 · 计算机学科教育专用大模型 · 推荐</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="5">往下读 · 两条线怎么互相喂养 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ 两端交互 -->
+  <section class="chapter page-main interplay">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>两端交互</div>
+      <h2 class="title" data-reveal data-d="1">两条业务线，<span class="accent">内外双循环</span></h2>
+      <p class="lede" data-reveal data-d="1">一条求稳、一条赌未来。它们客户不同、节奏不同，却能通过<b>资金、能力、经验</b>彼此支撑。但先要立一条底线——它决定了两端之间到底能流动什么。</p>
+
+      <!-- 原则 -->
+      <div class="principle" data-reveal data-d="2">
+        <div class="big">搬走<span class="accent">能力</span>，不搬走<span class="accent">数据</span></div>
+        <p>先声明清楚：B 端客户对自有数据享有产权保护，把平台交付给学校后，平台上的一切数据<b>主权在学校</b>——我们不能、也不会把它导出来喂 C 端。所以两端之间流动的，是团队沉淀的<b>算法、能力、经验、内容、现金</b>，唯独<b>不是原始数据</b>。</p>
+      </div>
+
+      <!-- 内循环 -->
+      <div class="block" data-reveal>
+        <div class="section-kicker">内循环 · 线内的复利引擎</div>
+        <h3 class="sub">各自转各自的圈，形状还不一样</h3>
+        <div class="duo">
+          <div class="pcard b">
+            <span class="tag">to-B · 多米诺骨牌</span>
+            <h4>一张牌，推倒下一张</h4>
+            <p class="posi">驱动力是<b>模板复制 + 背书</b>，线性级联，每张更省力。</p>
+            <div class="chips">
+              <span class="chip">南大（第一张）</span>
+              <span class="chip-arr">→</span>
+              <span class="chip">成熟克隆体 + 背书</span>
+              <span class="chip-arr">→</span>
+              <span class="chip">换壳微调到下一所</span>
+              <span class="loop-tag">▸ 每卖一个，边际成本再降一点</span>
+            </div>
+          </div>
+          <div class="pcard c">
+            <span class="tag">to-C · 数据飞轮</span>
+            <h4>越转越快的正反馈</h4>
+            <p class="posi">驱动力是<b>数据 × 模型</b>，非线性复利，只在自有用户上转。</p>
+            <div class="chips">
+              <span class="chip">自有用户</span>
+              <span class="chip-arr">→</span>
+              <span class="chip">行为数据</span>
+              <span class="chip-arr">→</span>
+              <span class="chip">引擎变强</span>
+              <span class="chip-arr">→</span>
+              <span class="chip">产品更好</span>
+              <span class="loop-tag">↻ 更多用户 → 更多数据，飞轮越滚越快</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 理想曲线 -->
+      <div class="block" data-reveal>
+        <div class="section-kicker">理想模型 · 成本 vs 营收</div>
+        <h3 class="sub">把账画出来：两条线随时间的形状</h3>
+        <div class="chart-legend">
+          <span class="k"><span class="sw dash"></span>投入成本</span>
+          <span class="k"><span class="sw"></span>营收收入</span>
+          <span class="k">横轴 = 时间 · 纵轴 = 金额（理论示意，非实际数据）</span>
+        </div>
+        <div class="charts">
+          <div class="chartcard b">
+            <h4>B 端 · 现金牛</h4>
+            <svg class="chart-svg" viewBox="0 0 430 262" role="img" aria-label="B 端成本随时间下行、营收稳定累积">
+              <g stroke="rgba(64,50,36,.09)" stroke-width="1" stroke-dasharray="3 4">
+                <line x1="54" y1="66" x2="410" y2="66"/><line x1="54" y1="116" x2="410" y2="116"/><line x1="54" y1="166" x2="410" y2="166"/>
+              </g>
+              <g stroke="#9b9286" stroke-width="1.3"><line x1="54" y1="28" x2="54" y2="216"/><line x1="54" y1="216" x2="412" y2="216"/></g>
+              <path d="M54,24 l-4,8 l8,0 z" fill="#9b9286"/><path d="M416,216 l-8,-4 l0,8 z" fill="#9b9286"/>
+              <path d="M54,196 L406,62" fill="none" stroke="#9a6f27" stroke-width="3" stroke-linecap="round"/>
+              <path d="M54,86 C 150,146 265,168 406,182" fill="none" stroke="#bd8b3a" stroke-width="2" stroke-dasharray="6 5" stroke-linecap="round"/>
+              <circle cx="189" cy="145" r="4.5" fill="#fffdfa" stroke="#9a6f27" stroke-width="2"/>
+              <text x="46" y="38" text-anchor="end" font-size="11" fill="#9b9286">¥</text>
+              <text x="406" y="234" text-anchor="end" font-size="11" fill="#9b9286">时间 →</text>
+              <text x="236" y="150" font-size="10.5" fill="#9a6f27">早盈利 ↗</text>
+            </svg>
+            <p class="cap">成本随「换壳复制」越走越低，营收稳定累积——<b>剪刀差早早张开</b>，成为团队的现金来源。</p>
+          </div>
+          <div class="chartcard c">
+            <h4>C 端 · 增长期权</h4>
+            <svg class="chart-svg" viewBox="0 0 430 262" role="img" aria-label="C 端持续投入、营收后期指数增长">
+              <g stroke="rgba(64,50,36,.09)" stroke-width="1" stroke-dasharray="3 4">
+                <line x1="54" y1="66" x2="410" y2="66"/><line x1="54" y1="116" x2="410" y2="116"/><line x1="54" y1="166" x2="410" y2="166"/>
+              </g>
+              <g stroke="#9b9286" stroke-width="1.3"><line x1="54" y1="28" x2="54" y2="216"/><line x1="54" y1="216" x2="412" y2="216"/></g>
+              <path d="M54,24 l-4,8 l8,0 z" fill="#9b9286"/><path d="M416,216 l-8,-4 l0,8 z" fill="#9b9286"/>
+              <path d="M54,150 C 185,126 305,102 406,80" fill="none" stroke="#c15f3c" stroke-opacity=".5" stroke-width="2" stroke-dasharray="6 5" stroke-linecap="round"/>
+              <path d="M54,216 C 200,213 290,140 406,36" fill="none" stroke="#c15f3c" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="339" cy="94" r="4.5" fill="#fffdfa" stroke="#c15f3c" stroke-width="2"/>
+              <text x="46" y="38" text-anchor="end" font-size="11" fill="#9b9286">¥</text>
+              <text x="406" y="234" text-anchor="end" font-size="11" fill="#9b9286">时间 →</text>
+              <text x="333" y="80" text-anchor="end" font-size="10.5" fill="#c15f3c">指数拐点 ↗</text>
+              <text x="108" y="200" font-size="10" fill="#9b9286">前期蓄势</text>
+            </svg>
+            <p class="cap">前期投入大、后期持续加码，赌一个<b>指数拐点</b>——营收一旦接棒，便是主升浪。</p>
+          </div>
+        </div>
+        <div class="charts-note"><b>两张图叠起来看：</b>B 稳定的现金流为 C 的长期投入托底，直到 C 的指数营收接棒——这正是两条线必须<b>一起走</b>的原因。</div>
+      </div>
+
+      <!-- 外循环 -->
+      <div class="block" data-reveal>
+        <div class="section-kicker">外循环 · 团队级资产账户</div>
+        <h3 class="sub">两个内循环，共用同一个账户存取</h3>
+        <div class="savings">
+          <div class="sav-node b">B · 多米诺<small>每推倒一张牌<br>存一笔</small></div>
+          <div class="sav-link">⇄</div>
+          <div class="sav-core"><span class="lbl">越攒越厚</span><b>算法 · 流程<br>经验 · 人才</b></div>
+          <div class="sav-link">⇄</div>
+          <div class="sav-node c">C · 飞轮<small>每转一圈<br>存一笔</small></div>
+        </div>
+        <p class="sav-note" data-reveal>团队、资金、开发经验、那套共享引擎——<b>两条线都往里存，也都从里取</b>。账户越厚，下一张多米诺越好推、下一圈飞轮越快转。这才是「团队和底座共享」真正的含义。</p>
+      </div>
+
+      <!-- 单向输送 -->
+      <div class="block" data-reveal>
+        <div class="section-kicker">两端之间 · 到底在输送什么</div>
+        <h3 class="sub">流动的是成果，不是数据</h3>
+        <div class="transfer">
+          <div class="tr-row bc">
+            <span class="tr-dir">B → C</span>
+            <p><b>现金流</b>养 C 端研发 · <b>入校通道</b>让 C 端能在真实课堂里试点 · <b>场景 know-how</b> 与失败反馈打磨产品 · <b>背书</b>带来信任。</p>
+          </div>
+          <div class="tr-row cb">
+            <span class="tr-dir">C → B</span>
+            <p>C 端飞轮转出的<b>更强引擎</b>换壳装进 B 端交付 · C 端自制的<b>课程内容</b>可作为 B 端「助学」的现成资源。</p>
+          </div>
+        </div>
+        <div class="ironclad" data-reveal>铁律：流动的永远是能力、模型、内容与现金——数据主权，留在各自手里。</div>
+      </div>
+
+      <div class="chapter-next" data-reveal>
+        <button class="next-btn" data-goto="6">往下读 · 时间线与里程碑 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦ 时间线 · 里程碑 -->
+  <section class="chapter page-main">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>时间线 · 里程碑</div>
+      <h2 class="title" data-reveal data-d="1">我们已经走到<span class="accent">分叉点</span></h2>
+      <p class="lede" data-reveal data-d="1">前面这些是<b>已经完成的事</b>——技术验证、申请项目、初版 Demo。<b>「初版 Demo 完成」就是我们当前所在的分叉点</b>：从这里开始，B 端（左）与 C 端（右）各自往前。</p>
+
+      <!-- 分叉点之前 · 已完成的共享主干 -->
+      <div class="shared" data-reveal data-d="2">
+        <div class="s-item">
+          <span class="s-stem"></span><span class="s-dot"></span>
+          <div class="s-card">
+            <span class="done">已完成</span>
+            <h4>申请项目 · 拿到背书</h4>
+            <p>南大「计算机学科教育专用大模型」入选<b>教育部首批遴选</b>（结果：推荐）。</p>
+          </div>
+        </div>
+        <div class="s-item">
+          <span class="s-stem"></span><span class="s-dot"></span>
+          <div class="s-card">
+            <span class="done">已完成</span>
+            <h4>初步热身</h4>
+            <p>组建初步团队，把弯路走一遍，探索合作和开发模式。</p>
+          </div>
+        </div>
+        <div class="s-item now">
+          <span class="s-stem"></span><span class="s-dot"></span>
+          <div class="s-card">
+            <span class="done">当前 · 分叉点</span>
+            <h4>初版 Demo 完成</h4>
+            <p>端到端的初版 Demo 已经跑通——<b>两条产品线，从这里分头推进</b>。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 分叉桥 -->
+      <div class="diverge" data-reveal><span class="dn"></span><span class="arc"></span></div>
+
+      <!-- 两侧时间轴 -->
+      <div class="twoside">
+
+        <!-- 左 · B 端 -->
+        <div class="side b" data-reveal>
+          <span class="side-head">B 端 · 高校 AI 教育平台</span>
+          <div class="trow">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">现在起 · 并行</div>
+              <h4>打磨南大平台「母版」</h4>
+              <p>以南大项目为第一块试验田，沉淀一套<b>成熟的 B 端方案母版</b>。</p>
+            </div>
+          </div>
+          <div class="trow key">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">里程碑 · 8 月底–9 月前</div>
+              <h4>上线 1 个达到交付水平的 B 端产品</h4>
+              <p>开学前至少完成<b>一个能真正交付的 B 端产品</b>。</p>
+              <div class="t-tags"><span>B 端 · 可交付产品 ×1</span></div>
+            </div>
+          </div>
+          <div class="trow">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">测试 · 开学初</div>
+              <h4>进刘老师课堂试点</h4>
+              <p>在我们自己开设的课程中和组内进行试用，<b>收集第一批使用反馈</b>。</p>
+            </div>
+          </div>
+          <div class="trow">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">迭代 · 学期内</div>
+              <h4>打磨可复制的交付母版</h4>
+              <p>把交付流程与模板固化，为<b>换壳复制</b>做准备。</p>
+            </div>
+          </div>
+          <div class="trow key">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">里程碑 · 南大项目交付</div>
+              <h4>完成 B 端第一单，积累初始经费</h4>
+              <p>在南大校内产生影响力，把南大官方背书站稳。</p>
+              <div class="t-tags"><span>B 端 · 结单 ×1</span></div>
+            </div>
+          </div>
+          <div class="trow">
+            <div class="trail"><span class="tdot"></span></div>
+            <div class="tbody">
+              <div class="t-when">扩张 · 成熟之后</div>
+              <h4>复制到下一所学校</h4>
+              <p>换 IP、换壳——<b>多米诺推倒下一张</b>，边际成本递减。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右 · C 端 -->
+        <div class="side c" data-reveal>
+          <span class="side-head">C 端 · Vibe Learning</span>
+          <div class="trow">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">现在起 · 并行</div>
+              <h4>打磨底座与 Vibe 引擎</h4>
+              <p>把共享底座与认知引擎，<b>打磨到能撑起真实产品</b>。</p>
+            </div>
+          </div>
+          <div class="trow key">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">里程碑 · 8 月底–9 月前</div>
+              <h4>上线初代 C 端产品</h4>
+              <p>开学前至少完成<b>一个可上线的 C 端出版物</b>。</p>
+              <div class="t-tags"><span>C 端 · 可上线出版物 ×1</span></div>
+            </div>
+          </div>
+          <div class="trow">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">α 测试 · 开学初</div>
+              <h4>真实学生试用</h4>
+              <p>在校园里召集<b>第一批学生真实用户</b>，开展 α 测试，跑通闭环。</p>
+            </div>
+          </div>
+          <div class="trow">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">迭代 · 学期内</div>
+              <h4>刚需切入，校内推广</h4>
+              <p>召集第一批 β 测试用户，以<b>考研</b>等刚需内容切入校内推广。</p>
+            </div>
+          </div>
+          <div class="trow key">
+            <div class="trail"><span class="tdot"></span><span class="tline"></span></div>
+            <div class="tbody">
+              <div class="t-when">里程碑 · 第一套闭环课程</div>
+              <h4>C 端产品走出 β 测试</h4>
+              <p>完成<b>第一个闭环课程（暂定 408 考研）</b>，剑指王道</p>
+              <div class="t-tags"><span>C 端 · 可上线出版物 ×1</span></div>
+            </div>
+          </div>
+          <div class="trow">
+            <div class="trail"><span class="tdot"></span></div>
+            <div class="tbody">
+              <div class="t-when">扩张 · 成熟之后</div>
+              <h4>走出校园，正式扩散</h4>
+              <p>产品打磨成熟后，<b>正式上线、对外扩散</b>。</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <ul class="note-list" data-reveal>
+        <li>我们把完整业务线向你展示，是希望你在了解<b>方向、机遇与节奏</b>的前提下，判断这件事和你对不对得上频率。</li>
+        <li>还有一些更内部的信息（合作细节、更具体的排期与分工），会在进一步深入参与后再逐层展开。</li>
+      </ul>
+
+      <div class="cta" data-reveal>
+        <h2>以上是我们内部商业计划书的完整内容</h2>
+        <p>如果你觉得这份 BP 还算靠谱，可以来掺一脚，欢迎直接联系，我们欢迎会上见。</p>
+        <small>你已经有我们的联系方式了 · 剩下的随时聊</small>
+      </div>
+
+      <div class="end-foot" data-reveal>
+        © <span id="yr">2026</span> · 南京大学 LINK 实验室 · <a class="link" href="https://www.nju-link.com" target="_blank" rel="noopener">nju-link.com</a> · 一支想把「学习」重做一遍的小团队
+      </div>
+
+      <div class="chapter-next" data-reveal>
+        <button class="back-btn" data-goto="0">↑ &nbsp;回到开头</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var chapters = [].slice.call(document.querySelectorAll('.chapter'));
+  var dots = [].slice.call(document.querySelectorAll('#dots .dot-btn'));
+  var progressBar = document.getElementById('progressBar');
+  var active = 0;
+
+  function playReveal(chapter){
+    var revs = [].slice.call(chapter.querySelectorAll('[data-reveal]'));
+    if (reduce){ revs.forEach(function(el){ el.classList.add('in'); }); return; }
+    revs.forEach(function(el){ el.classList.remove('in'); });
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      revs.forEach(function(el){ el.classList.add('in'); });
+    }); });
+  }
+
+  function show(i){
+    i = Math.max(0, Math.min(chapters.length - 1, i));
+    chapters.forEach(function(c, idx){ c.classList.toggle('active', idx === i); });
+    dots.forEach(function(d, idx){ d.classList.toggle('on', idx === i); });
+    active = i;
+    progressBar.style.width = ((i + 1) / chapters.length * 100).toFixed(1) + '%';
+    window.scrollTo(0, 0);
+    playReveal(chapters[i]);
+  }
+
+  document.querySelectorAll('[data-goto]').forEach(function(btn){
+    btn.addEventListener('click', function(){ show(parseInt(btn.getAttribute('data-goto'), 10) || 0); });
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown'){ if (active < chapters.length - 1) show(active + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ if (active > 0) show(active - 1); }
+  });
+
+  try{ document.getElementById('yr').textContent = new Date().getFullYear(); }catch(e){}
+
+  show(0);
+})();
+</script>
+</body>
+</html>
