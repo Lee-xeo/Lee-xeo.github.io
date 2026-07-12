@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>开达教育 · 商业计划书</title>
+<meta name="description" content="开达教育 — 用 AI 把「学习」重做一遍。一个认知引擎,两条产品线。" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf7f2;--bg-2:#f2ede4;--surface:#fffdfa;--surface-2:#f6f1e9;
+  --border:rgba(64,50,36,.13);--border-strong:rgba(64,50,36,.22);
+  --text:#2b2622;--muted:#6f665c;--muted-2:#9b9286;
+  --clay:#c15f3c;--clay-2:#a64a2c;--clay-bright:#d97757;--clay-soft:#f4e7df;
+  --gold:#bd8b3a;--gold-2:#9a6f27;--gold-soft:rgba(189,139,58,.12);
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.72;-webkit-font-smoothing:antialiased;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(1100px 620px at 82% -12%,rgba(217,119,87,.10),transparent 62%),
+  radial-gradient(900px 560px at 2% 4%,rgba(189,139,58,.08),transparent 58%),
+  linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);}
+
+/* ---------- deck ---------- */
+.deck{display:flex;width:1400vw;height:100vh;height:100svh;
+  transform:translateX(calc(var(--i,0)*-100vw));
+  transition:transform .72s cubic-bezier(.22,.72,.18,1);will-change:transform}
+.slide{width:100vw;height:100vh;height:100svh;flex-shrink:0;position:relative;
+  display:flex;align-items:center;justify-content:center;padding:64px 0 84px;overflow:hidden}
+.inner{width:min(1180px,92vw);max-height:100%;overflow-y:auto;scrollbar-width:none;padding:6px 2px}
+.inner::-webkit-scrollbar{display:none}
+
+/* no-js: vertical readable */
+html:not(.js) body{overflow:auto}
+html:not(.js) .deck{display:block;width:auto;height:auto;transform:none}
+html:not(.js) .slide{height:auto;min-height:100vh;padding:72px 0}
+html:not(.js) .ui,html:not(.js) .hint{display:none}
+html:not(.js) [data-reveal]{opacity:1 !important;transform:none !important}
+
+/* ---------- typography ---------- */
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--clay);
+  text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.eyebrow::before{content:"";width:22px;height:1.5px;background:var(--clay);opacity:.75}
+.eyebrow .no{color:var(--muted-2);letter-spacing:.06em}
+h2.t{font-family:var(--serif);font-weight:900;font-size:clamp(28px,3.6vw,50px);line-height:1.2;letter-spacing:-.01em;margin-bottom:16px}
+.accent{color:var(--clay)}.accent-g{color:var(--gold-2)}
+.lede{color:var(--muted);font-size:clamp(15.5px,1.5vw,18.5px);max-width:72ch}
+.lede b,.lede strong{color:var(--text);font-weight:650}
+.note{margin-top:22px;font-size:14px;color:var(--muted-2);border-top:1px dashed var(--border-strong);padding-top:14px}
+.note b{color:var(--muted)}
+
+/* ---------- cards & grids ---------- */
+.grid{display:grid;gap:14px;margin-top:28px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;
+  box-shadow:0 1px 0 rgba(64,50,36,.04)}
+.card h4{font-family:var(--serif);font-size:18px;font-weight:700;margin-bottom:8px}
+.card p,.card li{font-size:14.5px;color:var(--muted)}
+.card ul{list-style:none}
+.card li{padding-left:16px;position:relative;margin-top:6px}
+.card li::before{content:"◆";position:absolute;left:0;top:0;font-size:8px;color:var(--clay-bright)}
+.card.b{border-top:3px solid var(--gold)}
+.card.c{border-top:3px solid var(--clay)}
+.card.b li::before{color:var(--gold)}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:4px 10px;
+  border-radius:999px;margin-bottom:10px;border:1px solid var(--border-strong)}
+.tag.b{color:var(--gold-2);background:var(--gold-soft)}
+.tag.c{color:var(--clay);background:var(--clay-soft)}
+.kpi{font-family:var(--serif);font-weight:900;font-size:clamp(26px,2.6vw,38px);line-height:1.1}
+.kpi small{font-size:.45em;font-weight:500;color:var(--muted-2);font-family:var(--sans)}
+
+/* ---------- cover ---------- */
+.cover{text-align:center}
+.cover .mark-big{width:74px;height:74px;border-radius:20px;background:var(--clay);color:#fff;margin:0 auto 30px;
+  display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:40px;
+  box-shadow:0 10px 34px rgba(193,95,60,.35)}
+.cover .brand-mono{font-family:var(--mono);font-size:12.5px;letter-spacing:.34em;color:var(--muted-2);margin-bottom:20px;text-transform:uppercase}
+.cover h1{font-family:var(--serif);font-weight:900;font-size:clamp(46px,7vw,96px);line-height:1.12;letter-spacing:.02em}
+.cover .slogan{font-family:var(--serif);font-size:clamp(19px,2.4vw,30px);color:var(--muted);margin-top:22px;font-weight:600}
+.cover .slogan .accent{font-weight:900}
+.cover .sub{margin-top:30px;display:flex;gap:12px 26px;justify-content:center;flex-wrap:wrap;
+  font-family:var(--mono);font-size:13px;color:var(--muted-2)}
+.cover .sub span{display:inline-flex;align-items:center;gap:7px}
+.cover .sub span::before{content:"◆";color:var(--clay-bright);font-size:9px}
+.cover .who{margin-top:44px;font-size:14px;color:var(--muted-2)}
+
+/* ---------- S03 problem ---------- */
+.quote-row .card{background:var(--surface)}
+.quote-row .q{font-family:var(--serif);font-size:16.5px;font-weight:700;color:var(--text);margin-bottom:10px}
+.quote-row .q::before{content:"「"}.quote-row .q::after{content:"」"}
+.quote-row .a{font-size:14px;color:var(--muted)}
+.quote-row .a b{color:var(--clay)}
+
+/* ---------- S04 timing ---------- */
+.gap-note{margin-top:20px;background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:14px;
+  padding:18px 22px;font-size:15px;color:var(--muted)}
+.gap-note b{color:var(--text)}
+
+/* ---------- S05 engine ---------- */
+.engine{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch;margin-top:30px}
+.engine .core{align-self:center;text-align:center;background:var(--surface);border:1.5px solid var(--border-strong);
+  border-radius:18px;padding:26px 28px;min-width:230px;box-shadow:0 8px 28px rgba(64,50,36,.08)}
+.engine .core h3{font-family:var(--serif);font-size:21px;font-weight:900;margin-bottom:10px}
+.engine .core p{font-size:13px;color:var(--muted-2);font-family:var(--mono);line-height:2}
+.engine .side{display:flex;flex-direction:column;justify-content:center}
+.arrow-lbl{text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted-2);margin-top:8px}
+
+/* ---------- S06 five assists ---------- */
+.assist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:26px}
+.assist{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:17px 18px}
+.assist .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.assist h4{font-family:var(--serif);font-size:17px;font-weight:700}
+.assist .w{font-family:var(--mono);font-size:10.5px;color:var(--gold-2);background:var(--gold-soft);
+  padding:3px 8px;border-radius:999px}
+.assist .w.heavy{color:#fff;background:var(--gold)}
+.assist p{font-size:13.5px;color:var(--muted)}
+.assist.loop{background:var(--surface-2);border-style:dashed}
+
+/* ---------- S08 market ---------- */
+.funnel{margin-top:26px;display:flex;flex-direction:column;gap:10px}
+.f-bar{border-radius:12px;padding:16px 22px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border:1px solid var(--border-strong)}
+.f-bar .lv{font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:3px 9px;border-radius:999px;color:#fff}
+.f-bar .amt{font-family:var(--serif);font-weight:900;font-size:clamp(20px,2.2vw,30px)}
+.f-bar .amt small{font-size:.5em;font-weight:500;font-family:var(--sans);color:var(--muted)}
+.f-bar .desc{font-size:13.5px;color:var(--muted);flex:1;min-width:220px}
+.f-tam{background:linear-gradient(90deg,rgba(193,95,60,.12),rgba(189,139,58,.10));width:100%}
+.f-tam .lv{background:var(--clay)}
+.f-sam{background:var(--surface);width:88%}
+.f-sam .lv{background:var(--gold)}
+.f-som{background:var(--surface);width:70%}
+.f-som .lv{background:var(--muted)}
+.src{margin-top:18px;font-size:12px;color:var(--muted-2);line-height:1.9}
+.src sup{color:var(--clay)}
+
+/* ---------- S09 model charts ---------- */
+.chart-svg{width:100%;height:auto;display:block;margin-top:8px}
+.cap{font-size:13px;color:var(--muted);margin-top:8px}
+.cap b{color:var(--text)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted-2);font-family:var(--mono);margin-top:22px}
+.legend .sw{display:inline-block;width:20px;height:3px;background:currentColor;vertical-align:middle;margin-right:6px;border-radius:2px}
+.legend .dash{background:repeating-linear-gradient(90deg,currentColor 0 5px,transparent 5px 9px)}
+
+/* ---------- S10 outer loop ---------- */
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:30px}
+.chip{background:var(--surface);border:1px solid var(--border-strong);border-radius:12px;padding:13px 18px;
+  text-align:center;font-size:14px;font-weight:600;line-height:1.45}
+.chip small{display:block;font-weight:400;font-family:var(--mono);font-size:10.5px;color:var(--muted-2);margin-top:3px}
+.chip.b{border-top:3px solid var(--gold)}
+.chip.c{border-top:3px solid var(--clay)}
+.chip-arr{font-family:var(--mono);color:var(--clay-bright);font-size:17px}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:26px}
+.pillars .card{padding:16px 18px}
+.pillars .n{font-family:var(--mono);font-size:11px;color:var(--clay);margin-bottom:6px}
+.ironclad{margin-top:24px;text-align:center;font-family:var(--serif);font-weight:700;font-size:15.5px;
+  background:var(--clay-soft);border:1px solid var(--border-strong);border-radius:999px;padding:12px 26px;
+  display:table;margin-left:auto;margin-right:auto}
+
+/* ---------- S11 competition ---------- */
+.comp{width:100%;border-collapse:separate;border-spacing:0;margin-top:26px;font-size:14px}
+.comp th,.comp td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.comp th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted-2);font-weight:500}
+.comp td:first-child{font-weight:700;font-family:var(--serif);white-space:nowrap}
+.comp .us{background:var(--clay-soft)}
+.comp .us td:first-child{color:var(--clay-2)}
+.comp td{color:var(--muted)}.comp td b{color:var(--text)}
+.moat{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:22px}
+
+/* ---------- S12 milestones ---------- */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px;position:relative}
+.tl::before{content:"";position:absolute;top:9px;left:4%;right:4%;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--clay-bright));opacity:.4}
+.tl .col{position:relative;padding-top:26px}
+.tl .col::before{content:"";position:absolute;top:2px;left:0;width:16px;height:16px;border-radius:50%;
+  background:var(--surface);border:3px solid var(--clay-bright)}
+.tl .col.done::before{background:var(--clay-bright)}
+.tl .when{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--clay);margin-bottom:10px}
+.tl .card{margin-top:10px}
+.tl .card h4{font-size:15.5px}
+.tl .card p{font-size:13px}
+.tl .pill{display:inline-block;font-family:var(--mono);font-size:10.5px;color:var(--gold-2);
+  background:var(--gold-soft);border-radius:999px;padding:2px 9px;margin-top:8px}
+
+/* ---------- S13 team ---------- */
+.person{display:flex;gap:16px;align-items:flex-start}
+.person .av{width:52px;height:52px;border-radius:14px;flex-shrink:0;display:grid;place-items:center;
+  font-family:var(--serif);font-weight:900;font-size:22px;color:#fff}
+.person.p1 .av{background:var(--gold)}
+.person.p2 .av{background:var(--clay)}
+.person h4{font-family:var(--serif);font-size:18px}
+.person .role{font-family:var(--mono);font-size:11.5px;color:var(--muted-2);margin-bottom:6px}
+.person p{font-size:13.5px;color:var(--muted)}
+.culture{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+.culture span{font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--border);
+  border-radius:999px;padding:7px 16px}
+.culture b{color:var(--clay)}
+
+/* ---------- S14 ask ---------- */
+.ask-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.ask-grid .card{text-align:center;padding:26px 18px}
+.ask-grid .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--muted-2);margin-bottom:10px}
+.ask-grid .v{font-family:var(--serif);font-weight:900;font-size:clamp(20px,2vw,27px);color:var(--clay-2)}
+.ask-grid .v.soft{color:var(--muted)}
+.use-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.use-row span{flex:1;min-width:150px;text-align:center;background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:13px 10px;font-size:13.5px;color:var(--muted)}
+.use-row b{display:block;font-family:var(--serif);font-size:17px;color:var(--text);margin-bottom:2px}
+.contact{margin-top:34px;text-align:center}
+.contact .cta{font-family:var(--serif);font-size:clamp(19px,2.2vw,26px);font-weight:900}
+.contact .ways{margin-top:14px;font-family:var(--mono);font-size:13.5px;color:var(--muted);display:flex;gap:10px 28px;justify-content:center;flex-wrap:wrap}
+.contact a{color:var(--clay);text-decoration:none;border-bottom:1px solid rgba(193,95,60,.35)}
+
+/* ---------- fixed UI ---------- */
+.ui{position:fixed;z-index:50;font-family:var(--mono)}
+.ui-brand{left:26px;bottom:22px;display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted-2)}
+.ui-brand .m{width:22px;height:22px;border-radius:7px;background:var(--clay);color:#fff;display:grid;place-items:center;
+  font-family:var(--serif);font-weight:900;font-size:12px}
+.ui-page{right:26px;bottom:22px;font-size:12.5px;color:var(--muted-2);letter-spacing:.1em}
+.ui-page b{color:var(--clay);font-weight:600}
+.ui-dots{left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:8px}
+.ui-dots button{width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;background:rgba(64,50,36,.18);
+  transition:background .25s,transform .25s;padding:0}
+.ui-dots button:hover{background:var(--muted-2)}
+.ui-dots button.on{background:var(--clay);transform:scale(1.35)}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(64,50,36,.07);z-index:50}
+.progress i{display:block;height:100%;width:0;background:var(--clay-bright);transition:width .5s ease}
+.hint{position:fixed;right:26px;top:20px;z-index:50;font-family:var(--mono);font-size:11.5px;color:var(--muted-2);
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 14px;opacity:.85}
+
+/* ---------- reveal ---------- */
+[data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+[data-reveal].in{opacity:1;transform:none}
+[data-reveal][data-d="1"]{transition-delay:.09s}
+[data-reveal][data-d="2"]{transition-delay:.18s}
+[data-reveal][data-d="3"]{transition-delay:.27s}
+[data-reveal][data-d="4"]{transition-delay:.36s}
+@media(prefers-reduced-motion:reduce){
+  [data-reveal]{opacity:1;transform:none;transition:none}
+  .deck{transition:none}
+}
+
+/* ---------- mobile: vertical long page ---------- */
+@media(max-width:820px){
+  body{overflow:auto}
+  .deck{display:block;width:auto;height:auto;transform:none !important}
+  .slide{width:auto;height:auto;min-height:100svh;padding:64px 0;overflow:visible}
+  .inner{max-height:none;overflow:visible}
+  .g2,.g3,.assist-grid,.pillars,.moat,.tl,.ask-grid{grid-template-columns:1fr}
+  .tl::before{display:none}
+  .engine{grid-template-columns:1fr}
+  .engine .core{order:-1}
+  .ui-dots,.hint{display:none}
+  .ui-page{display:none}
+  .comp{font-size:12.5px}
+  .comp th,.comp td{padding:9px 8px}
+  .f-sam,.f-som{width:100%}
+}
+
+/* ---------- print ---------- */
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  body{overflow:visible;background:#fff}
+  .bg,.ui,.progress,.hint{display:none !important}
+  .deck{display:block;width:auto;height:auto;transform:none !important}
+  .slide{width:auto;height:auto;min-height:0;padding:8mm 0;overflow:visible;break-after:page}
+  .inner{max-height:none;overflow:visible}
+  [data-reveal]{opacity:1 !important;transform:none !important}
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="progress"><i id="prog"></i></div>
+
+<div class="ui ui-brand"><span class="m">开</span><span>开达教育 · 商业计划书</span></div>
+<div class="ui ui-page"><b id="pg-cur">01</b> / <span id="pg-all">14</span></div>
+<div class="ui ui-dots" id="dots" aria-label="页面导航"></div>
+<div class="hint" id="hint">← → 翻页 · F 全屏</div>
+
+<main class="deck" id="deck">
+
+<!-- ======== 01 封面 ======== -->
+<section class="slide" data-title="封面">
+  <div class="inner cover">
+    <div class="mark-big" data-reveal>开</div>
+    <div class="brand-mono" data-reveal>KAIDA EDUCATION · BUSINESS PLAN</div>
+    <h1 data-reveal data-d="1">开达教育</h1>
+    <p class="slogan" data-reveal data-d="2">用 AI 把<span class="accent">「学习」</span>重做一遍</p>
+    <div class="sub" data-reveal data-d="3">
+      <span>一个认知引擎</span><span>两条产品线</span><span>to-B 增强体系内</span><span>to-C 变革体系外</span>
+    </div>
+    <p class="who" data-reveal data-d="4">南京大学 LINK 实验室创业团队 · 2026 年 7 月</p>
+  </div>
+</section>
+
+<!-- ======== 02 执行摘要 ======== -->
+<section class="slide" data-title="执行摘要">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">02</span>执行摘要</div>
+    <h2 class="t" data-reveal data-d="1">一页看懂<span class="accent">开达教育</span></h2>
+    <div class="grid g3">
+      <div class="card" data-reveal data-d="1"><h4>我们是谁</h4>
+        <p>南京大学 LINK 实验室孵化的 AI 教育创业团队,算法、开发、产品完整建制,既懂大模型,也懂学习。</p></div>
+      <div class="card" data-reveal data-d="1"><h4>做什么</h4>
+        <p>一个认知引擎,两条产品线:<b>to-B 多角色教学平台</b>(现金牛)+ <b>to-C Vibe Learning</b>(增长期权)。</p></div>
+      <div class="card" data-reveal data-d="2"><h4>走到哪了</h4>
+        <p>端到端产品 Demo 已跑通,首个高校客户项目落地中;今年 8 月底前双线各交付一个产品。</p></div>
+      <div class="card" data-reveal data-d="2"><h4>市场多大</h4>
+        <p>中国智能教育行业 2024 年约 <b>3,694 亿元</b>,AI 原生重构的窗口刚刚打开。</p></div>
+      <div class="card" data-reveal data-d="3"><h4>凭什么是我们</h4>
+        <p><b>B 端重开发、C 端重算法</b>:B 线交付养活团队,C 线算法沉淀壁垒,一套模块两次变现。</p></div>
+      <div class="card" data-reveal data-d="3"><h4>要什么</h4>
+        <p>正在启动天使轮融资,资金用于算法研发、产品交付与首批市场验证(详见第 14 页)。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 03 问题 ======== -->
+<section class="slide" data-title="问题">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">03</span>问题</div>
+    <h2 class="t" data-reveal data-d="1">学习的<span class="accent">个性化鸿沟</span>,从未被真正填上</h2>
+    <p class="lede" data-reveal data-d="1">每个学生都想学会,但「学会」这件事,今天仍然只为少数人设计。听听学生自己怎么说:</p>
+    <div class="grid g3 quote-row">
+      <div class="card" data-reveal data-d="1">
+        <p class="q">教材写得很好,但我看不懂、看不进去</p>
+        <p class="a">→ 写书做课的人的<b>认知逻辑</b>,和我的并不匹配。</p>
+      </div>
+      <div class="card" data-reveal data-d="2">
+        <p class="q">我不知道我为什么不会,也不知道该怎么办</p>
+        <p class="a">→ 没有人能帮我,因为<b>没有人真正了解我</b>。</p>
+      </div>
+      <div class="card" data-reveal data-d="3">
+        <p class="q">我喜欢在练习中学 / 我听不进课 / 我靠笔记……</p>
+        <p class="a">→ <b>个性化学习习惯</b>,从来没有被服务过。</p>
+      </div>
+    </div>
+    <p class="note" data-reveal data-d="3"><b>结构性矛盾:</b>大班教学顾不上个体差异,小班与名师昂贵且稀缺、无法复制共享。学习效率的转折点发生在学生掌握自己个性化学习方法的那一刻——但绝大多数人,从未等到这一刻。</p>
+  </div>
+</section>
+
+<!-- ======== 04 时机 ======== -->
+<section class="slide" data-title="时机">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">04</span>为什么是现在</div>
+    <h2 class="t" data-reveal data-d="1">政策与技术的<span class="accent">双拐点</span></h2>
+    <div class="grid g2">
+      <div class="card b" data-reveal data-d="1">
+        <span class="tag b">政策拐点 · 体系内需求</span>
+        <h4>「人工智能 + 教育」写进国家战略</h4>
+        <ul>
+          <li>《教育强国建设规划纲要(2024–2035)》明确 AI 赋能教育方向,试点持续加码。</li>
+          <li>高校普遍面临「拥抱 AI」的升级任务,却缺少能承接落地的专门团队。</li>
+          <li>意味着 to-B 有<b>真实、持续、愿意买单</b>的一方。</li>
+        </ul>
+      </div>
+      <div class="card c" data-reveal data-d="2">
+        <span class="tag c">技术拐点 · 体系外机会</span>
+        <h4>基座模型能力跨过「可用」线</h4>
+        <ul>
+          <li>「一位有无限耐心、可低成本复制的一对一老师」第一次在技术上成立。</li>
+          <li>把「学习」重做一遍,不再是修修补补,而是提出全新解法的机会。</li>
+          <li>面向 C 端,这是一个<b>革命性</b>而非改良性的窗口。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gap-note" data-reveal data-d="3">
+      <b>夹缝里的窗口:</b>传统教培无法自我革命,大模型厂商无暇顾及教育纵深——两边都到不了的地方,正是我们的位置。
+    </div>
+  </div>
+</section>
+
+<!-- ======== 05 解法总览 ======== -->
+<section class="slide" data-title="解法">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">05</span>解法</div>
+    <h2 class="t" data-reveal data-d="1">一个<span class="accent">认知引擎</span>,两条产品线</h2>
+    <p class="lede" data-reveal data-d="1">两条路线的分叉点在于:<b>体系内</b>与<b>体系外</b>,<b>多角色</b>与<b>单角色</b>,<b>增强</b>与<b>变革</b>。</p>
+    <div class="engine">
+      <div class="side" data-reveal data-d="2">
+        <div class="card b">
+          <span class="tag b">to-B · 体系内的增强</span>
+          <h4>多角色教学平台</h4>
+          <ul>
+            <li>服务学生 / 教师 / 教务多角色</li>
+            <li>目标:让各角色的工作被 AI 辅助提效</li>
+            <li>模式:母版打磨 → 换壳复制</li>
+          </ul>
+        </div>
+        <div class="arrow-lbl">◀ 工程化交付</div>
+      </div>
+      <div class="core" data-reveal data-d="1">
+        <h3>认知引擎</h3>
+        <p>认知建模<br>任务构造<br>个性化画像<br>长程记忆</p>
+      </div>
+      <div class="side" data-reveal data-d="3">
+        <div class="card c">
+          <span class="tag c">to-C · 体系外的变革</span>
+          <h4>Vibe Learning</h4>
+          <ul>
+            <li>只服务一个人:自学的学生</li>
+            <li>目标:让不会学习的人「被动」会学</li>
+            <li>模式:数据飞轮,越用越懂你</li>
+          </ul>
+        </div>
+        <div class="arrow-lbl">算法深化 ▶</div>
+      </div>
+    </div>
+    <p class="note" data-reveal data-d="3">两条线客户不同、形态不同、商业模式不同——但共享<b>同一个团队、同一套底座、同一条开发流水线</b>。</p>
+  </div>
+</section>
+
+<!-- ======== 06 to-B ======== -->
+<section class="slide" data-title="to-B">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">06</span>产品线一 · to-B</div>
+    <h2 class="t" data-reveal data-d="1">多角色教学平台 —— <span class="accent-g">增强与赋能</span></h2>
+    <p class="lede" data-reveal data-d="1">当下正在落地的产品线。平台拆成<b>五个「助」</b>的业务模块,共用同一套底层,各自面向不同角色、深浅不同。</p>
+    <div class="assist-grid">
+      <div class="assist" data-reveal data-d="1"><div class="top"><h4>助学</h4><span class="w heavy">核心 · 重</span></div>
+        <p>给学生「轻引导式教学」——刻意做增强,不做替代。</p></div>
+      <div class="assist" data-reveal data-d="1"><div class="top"><h4>助教</h4><span class="w">核心 · 中</span></div>
+        <p>帮老师发任务、批改、答疑,与助学构成师生闭环的另一半。</p></div>
+      <div class="assist" data-reveal data-d="2"><div class="top"><h4>助研</h4><span class="w heavy">重</span></div>
+        <p>科研知识库 + 论文写作辅助,复用同一套知识库引擎。</p></div>
+      <div class="assist" data-reveal data-d="2"><div class="top"><h4>助管</h4><span class="w">薄 · 单点</span></div>
+        <p>全局学情看板 + 预警,先做一个核心功能立住。</p></div>
+      <div class="assist" data-reveal data-d="3"><div class="top"><h4>国际交流</h4><span class="w">薄 · 单点</span></div>
+        <p>留学 / 交换项目问答,同样先立住一个核心功能。</p></div>
+      <div class="assist loop" data-reveal data-d="3"><div class="top"><h4 style="color:var(--muted)">核心闭环</h4></div>
+        <p><b>助学 ↔ 助教</b> = 「超星学习通的 AI 版」:老师发任务 → 学生完成 → 全程嵌 AI。</p></div>
+    </div>
+    <p class="note" data-reveal data-d="3"><b>交付模式:</b>在首个高校客户身上打磨出一套成熟「母版」,之后扩展到下一所学校本质是换 IP、换壳复制——边际成本逐单递减。</p>
+  </div>
+</section>
+
+<!-- ======== 07 to-C ======== -->
+<section class="slide" data-title="to-C">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">07</span>产品线二 · to-C</div>
+    <h2 class="t" data-reveal data-d="1">Vibe Learning —— <span class="accent">跟着感觉推进学习</span></h2>
+    <p class="lede" data-reveal data-d="1">整条产品只服务一个人:<b>正在自学的学生</b>。AI 构造任务、建模认知、个性化画像、长程监管,帮学生进入学习心流——让不会学习的学生「被动」地会学,让学习变得自然而然。</p>
+    <div class="grid g3">
+      <div class="card c" data-reveal data-d="1"><h4>认知建模</h4>
+        <p>不是问答机器人,而是持续建模「你懂什么、卡在哪」的学习引擎。</p></div>
+      <div class="card c" data-reveal data-d="2"><h4>个性化路径</h4>
+        <p>学习材料与任务按<b>你的认知逻辑</b>重新组织,而不是按作者的。</p></div>
+      <div class="card c" data-reveal data-d="3"><h4>长程陪伴</h4>
+        <p>记住每一次学习,画像随时间累积——<b>越用越懂你</b>。</p></div>
+    </div>
+    <p class="note" data-reveal data-d="3"><b>市场定位:</b>C 端剑指整个传统教辅培训行业(考研 / 考公 / 法考 / 雅思……),首个闭环课程从 <b>408 计算机考研</b>切入。</p>
+  </div>
+</section>
+
+<!-- ======== 08 市场 ======== -->
+<section class="slide" data-title="市场">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">08</span>市场规模</div>
+    <h2 class="t" data-reveal data-d="1">千亿级市场的<span class="accent">AI 原生重构</span></h2>
+    <div class="funnel">
+      <div class="f-bar f-tam" data-reveal data-d="1">
+        <span class="lv">TAM</span>
+        <span class="amt">¥3,694<small> 亿</small></span>
+        <span class="desc">中国智能教育行业市场规模(2024)<sup>①</sup>——AI 与教育融合的全量盘子。</span>
+      </div>
+      <div class="f-bar f-sam" data-reveal data-d="2">
+        <span class="lv">SAM</span>
+        <span class="amt">千亿<small> 级</small></span>
+        <span class="desc"><b>B 侧</b>:高等教育信息化约 1,141 亿(2023)<sup>②</sup>,其中教学信息化 2025E 约 405 亿<sup>②</sup>;<b>C 侧</b>:考研培训约 138.5 亿(2024)<sup>③</sup>,叠加考公 / 法考 / 语言培训的教辅大盘。</span>
+      </div>
+      <div class="f-bar f-som" data-reveal data-d="3">
+        <span class="lv">SOM</span>
+        <span class="amt">首批<small> 切入</small></span>
+        <span class="desc"><b>B</b>:高校 AI 教学平台母版 × 可复制院校;<b>C</b>:408 考研闭环课程可触达人群。以真实交付与留存说话,不预支份额。</span>
+      </div>
+    </div>
+    <p class="src" data-reveal data-d="3">
+      数据来源:① 华经产业研究院《中国智能教育行业市场深度分析报告》;② 东方财富行业研报(2024.05)、行业公开数据(2025E 预测值);③ 产业信息网 / 智研咨询(2025.07)。各机构统计口径存在差异,数字仅作量级参考。
+    </p>
+  </div>
+</section>
+
+<!-- ======== 09 商业模式 ======== -->
+<section class="slide" data-title="商业模式">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">09</span>商业模式</div>
+    <h2 class="t" data-reveal data-d="1">B 端<span class="accent-g">现金牛</span>,C 端<span class="accent">增长期权</span></h2>
+    <div class="grid g2">
+      <div class="card b" data-reveal data-d="1">
+        <span class="tag b">to-B · 多米诺骨牌</span>
+        <h4>项目制交付 + 年度运维订阅</h4>
+        <ul>
+          <li>单校项目<b>数十万至百万级</b>(量级示意)</li>
+          <li>母版 → 换壳复制,每卖一所边际成本再降一点</li>
+          <li>成本下行 × 营收累积,<b>剪刀差早早张开</b></li>
+        </ul>
+        <svg class="chart-svg" viewBox="0 0 430 200" role="img" aria-label="B 端成本随时间下行、营收稳定累积">
+          <g stroke="rgba(64,50,36,.09)" stroke-width="1" stroke-dasharray="3 4">
+            <line x1="46" y1="52" x2="410" y2="52"/><line x1="46" y1="100" x2="410" y2="100"/><line x1="46" y1="148" x2="410" y2="148"/>
+          </g>
+          <g stroke="#9b9286" stroke-width="1.3"><line x1="46" y1="20" x2="46" y2="172"/><line x1="46" y1="172" x2="412" y2="172"/></g>
+          <path d="M46,16 l-4,8 l8,0 z" fill="#9b9286"/><path d="M416,172 l-8,-4 l0,8 z" fill="#9b9286"/>
+          <path d="M46,156 L406,46" fill="none" stroke="#9a6f27" stroke-width="3" stroke-linecap="round"/>
+          <path d="M46,66 C 150,116 265,132 406,144" fill="none" stroke="#bd8b3a" stroke-width="2" stroke-dasharray="6 5" stroke-linecap="round"/>
+          <circle cx="182" cy="114" r="4.5" fill="#fffdfa" stroke="#9a6f27" stroke-width="2"/>
+          <text x="228" y="118" font-size="10.5" fill="#9a6f27">早盈利 ↗</text>
+          <text x="400" y="188" text-anchor="end" font-size="10.5" fill="#9b9286">时间 →</text>
+        </svg>
+        <p class="cap">实线=营收 · 虚线=成本(理论示意)。B 端是团队的<b>现金来源</b>。</p>
+      </div>
+      <div class="card c" data-reveal data-d="2">
+        <span class="tag c">to-C · 数据飞轮</span>
+        <h4>订阅制 / 课程制</h4>
+        <ul>
+          <li>自有用户 → 行为数据 → 引擎变强 → 产品更好</li>
+          <li>非线性复利,只在<b>自有用户</b>上转</li>
+          <li>前期蓄势,赌一个<b>指数拐点</b></li>
+        </ul>
+        <svg class="chart-svg" viewBox="0 0 430 200" role="img" aria-label="C 端持续投入、营收后期指数增长">
+          <g stroke="rgba(64,50,36,.09)" stroke-width="1" stroke-dasharray="3 4">
+            <line x1="46" y1="52" x2="410" y2="52"/><line x1="46" y1="100" x2="410" y2="100"/><line x1="46" y1="148" x2="410" y2="148"/>
+          </g>
+          <g stroke="#9b9286" stroke-width="1.3"><line x1="46" y1="20" x2="46" y2="172"/><line x1="46" y1="172" x2="412" y2="172"/></g>
+          <path d="M46,16 l-4,8 l8,0 z" fill="#9b9286"/><path d="M416,172 l-8,-4 l0,8 z" fill="#9b9286"/>
+          <path d="M46,118 C 185,100 305,82 406,64" fill="none" stroke="#c15f3c" stroke-opacity=".5" stroke-width="2" stroke-dasharray="6 5" stroke-linecap="round"/>
+          <path d="M46,172 C 200,170 290,110 406,28" fill="none" stroke="#c15f3c" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="330" cy="76" r="4.5" fill="#fffdfa" stroke="#c15f3c" stroke-width="2"/>
+          <text x="326" y="62" text-anchor="end" font-size="10.5" fill="#c15f3c">指数拐点 ↗</text>
+          <text x="96" y="160" font-size="10" fill="#9b9286">前期蓄势</text>
+          <text x="400" y="188" text-anchor="end" font-size="10.5" fill="#9b9286">时间 →</text>
+        </svg>
+        <p class="cap">实线=营收 · 虚线=成本(理论示意)。C 端是团队的<b>增长期权</b>。</p>
+      </div>
+    </div>
+    <p class="note" data-reveal data-d="3"><b>两张图叠起来看:</b>B 稳定的现金流为 C 的长期投入托底,直到 C 的指数营收接棒——这正是两条线必须一起走的原因。</p>
+  </div>
+</section>
+
+<!-- ======== 10 外循环 ★ ======== -->
+<section class="slide" data-title="外循环">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">10</span>核心机制 · 外循环</div>
+    <h2 class="t" data-reveal data-d="1"><span class="accent-g">B 端重开发</span>,<span class="accent">C 端重算法</span></h2>
+    <p class="lede" data-reveal data-d="1">每一个工具模块,都在两条线上<b>各活一次</b>:B 端交付它的基础版,C 端交付它的算法优化版。</p>
+    <div class="flow" data-reveal data-d="2">
+      <span class="chip b">B 线 · 全栈团队<small>FULL-STACK</small></span>
+      <span class="chip-arr">→</span>
+      <span class="chip b">工具模块「基础版」<small>B 端交付 · 收入①</small></span>
+      <span class="chip-arr">→</span>
+      <span class="chip">移植<small>PORT</small></span>
+      <span class="chip-arr">→</span>
+      <span class="chip c">C 线 · 算法团队<small>ALGORITHM</small></span>
+      <span class="chip-arr">→</span>
+      <span class="chip c">「算法优化版」<small>C 端产品 · 收入②</small></span>
+    </div>
+    <div class="pillars">
+      <div class="card" data-reveal data-d="2"><div class="n">01</div>
+        <p><b>一套模块,两次变现。</b>研发成本被 B 端订单部分消化,C 端拿到的是「已被真实交付验证过」的底子。</p></div>
+      <div class="card" data-reveal data-d="3"><div class="n">02</div>
+        <p><b>算法迭代永远有靶子。</b>优化版对照基础版,效果提升可度量——算法团队不在真空里做研究。</p></div>
+      <div class="card" data-reveal data-d="4"><div class="n">03</div>
+        <p><b>组织与业务同构。</b>全栈工程师属 B 线、算法研究员属 C 线,分工天然清晰,考核各有标尺。</p></div>
+    </div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card b" data-reveal data-d="3"><h4>B 端的业务在于开发</h4>
+        <p>本质是工程交付:比拼交付水准、复制效率与服务质量。</p></div>
+      <div class="card c" data-reveal data-d="3"><h4>C 端的护城河在于算法</h4>
+        <p>本质是学习效果:比拼认知建模、个性化与留存。</p></div>
+    </div>
+    <div class="ironclad" data-reveal data-d="4">铁律:搬走能力,不搬走数据 —— 客户数据主权永远留在客户手里,两线之间流动的是算法、能力、经验与现金。</div>
+  </div>
+</section>
+
+<!-- ======== 11 竞争与壁垒 ======== -->
+<section class="slide" data-title="竞争">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">11</span>竞争与壁垒</div>
+    <h2 class="t" data-reveal data-d="1">三类玩家都到不了的<span class="accent">位置</span></h2>
+    <table class="comp" data-reveal data-d="1">
+      <thead><tr><th>玩家</th><th>长处</th><th>到不了的地方</th></tr></thead>
+      <tbody>
+        <tr><td>传统教培 / 教辅<br><small style="color:var(--muted-2)">王道、文都等</small></td>
+          <td>内容成熟、渠道深、品牌久</td>
+          <td>人力密集,<b>无法规模化个性化</b>;革自己命等于砸自己饭碗</td></tr>
+        <tr><td>通用 AI 助手<br><small style="color:var(--muted-2)">ChatGPT、豆包等</small></td>
+          <td>模型能力强、用户量大</td>
+          <td>问一句答一句,<b>无认知建模、无学习闭环</b>,不为「学会」负责</td></tr>
+        <tr><td>教育信息化厂商<br><small style="color:var(--muted-2)">超星、雨课堂等</small></td>
+          <td>校园渠道深、存量客户多</td>
+          <td>工具思维,AI 是贴皮不是原生;<b>动不了自己的存量架构</b></td></tr>
+        <tr class="us"><td>开达教育</td>
+          <td colspan="2"><b>AI 原生认知引擎 + 双线互养结构</b>:团队既懂模型又懂学习,B 线供血、C 线沉淀,轻装上阵</td></tr>
+      </tbody>
+    </table>
+    <div class="moat">
+      <div class="card" data-reveal data-d="2"><h4>理念壁垒</h4><p>对「个性化学习方法」的深刻认知——产品的每个决策都从学习本质出发。</p></div>
+      <div class="card" data-reveal data-d="3"><h4>技术壁垒</h4><p>认知引擎随 C 端数据飞轮持续变强,后来者复制功能容易、复制积累难。</p></div>
+      <div class="card" data-reveal data-d="4"><h4>结构壁垒</h4><p>「B 养 C」的双线模式本身:纯 B 端公司没有算法纵深,纯 C 端公司熬不过投入期。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 12 里程碑 ======== -->
+<section class="slide" data-title="里程碑">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">12</span>里程碑与进展</div>
+    <h2 class="t" data-reveal data-d="1">已经上路,<span class="accent">节奏清晰</span></h2>
+    <div class="tl">
+      <div class="col done" data-reveal data-d="1">
+        <div class="when">已完成</div>
+        <div class="card"><h4>技术验证</h4><p>自研 Agent 框架与认知引擎底座跑通。</p></div>
+        <div class="card"><h4>团队组建</h4><p>算法 / 前后端 / 产品完整建制。</p></div>
+        <div class="card"><h4>端到端 Demo</h4><p>初版产品 Demo 全链路跑通——两条线从这里分头推进。</p></div>
+      </div>
+      <div class="col" data-reveal data-d="2">
+        <div class="when">进行中 · 至 2026.09</div>
+        <div class="card"><h4>双线各交付一个产品</h4><p>8 月底前:B 端一个可交付平台,C 端一个可上线产品。<span class="pill">B×1 + C×1</span></p></div>
+        <div class="card"><h4>首个高校客户落地</h4><p>B 端平台进入真实课堂试点,收集第一批教学反馈。</p></div>
+        <div class="card"><h4>C 端 α 测试</h4><p>校园内召集第一批真实学生用户,跑通学习闭环。</p></div>
+      </div>
+      <div class="col" data-reveal data-d="3">
+        <div class="when">未来 12 个月</div>
+        <div class="card"><h4>B 端首单结项 + 复制</h4><p>固化交付母版,推倒第二所学校的多米诺。<span class="pill">边际成本递减启动</span></p></div>
+        <div class="card"><h4>C 端首个闭环课程</h4><p>408 考研课程走出 β 测试,对标王道等成熟教辅。</p></div>
+        <div class="card"><h4>走出校园</h4><p>C 端产品正式上线、对外扩散,数据飞轮开始转动。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 13 团队 ======== -->
+<section class="slide" data-title="团队">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">13</span>团队</div>
+    <h2 class="t" data-reveal data-d="1">既懂<span class="accent">大模型</span>,也懂<span class="accent">学习</span>的人</h2>
+    <div class="grid g2">
+      <div class="card" data-reveal data-d="1">
+        <div class="person p1">
+          <div class="av">刘</div>
+          <div>
+            <h4>刘佳恒</h4>
+            <div class="role">首席科学家 / 学术顾问</div>
+            <p>南京大学助理教授、博士生导师;阿里星;开源大模型组织 M-A-P 创始成员之一。大模型预训练、后训练与评测方向,顶会论文数十篇。</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" data-reveal data-d="2">
+        <div class="person p2">
+          <div class="av">李</div>
+          <div>
+            <h4>李世昊</h4>
+            <div class="role">团队领队 / 项目负责人</div>
+            <p>南京大学智能科学与技术学院硕士;可灵 AI 大模型 Research 实习。长期从事大模型评测、合成数据与后训练,NeurIPS / ICLR 论文多篇。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px" data-reveal data-d="3">
+      <h4>核心团队</h4>
+      <p>算法研究员、前后端开发工程师、产品经理完整建制,成员来自南京大学等高校——按「B 线全栈 / C 线算法」的双线结构组织,支柱型人才各自独当一面。</p>
+      <div class="culture">
+        <span><b>扁平</b> · 无层级,目标一致分工协作</span>
+        <span><b>支柱</b> · 每人在擅长方向独当一面</span>
+        <span><b>互学</b> · 三人行必有我师</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== 14 融资 ======== -->
+<section class="slide" data-title="融资">
+  <div class="inner">
+    <div class="eyebrow" data-reveal><span class="no">14</span>融资计划</div>
+    <h2 class="t" data-reveal data-d="1">天使轮 · <span class="accent">与我们一起把学习重做一遍</span></h2>
+    <p class="lede" data-reveal data-d="1">我们正在启动天使轮融资。以下为方案框架,<b>具体数字以最新路演版本为准,欢迎联系获取</b>。</p>
+    <!-- 待确认:拟融金额 / 出让股比或估值 / runway —— 用户提供后填入下方三卡 -->
+    <div class="ask-grid">
+      <div class="card" data-reveal data-d="1">
+        <div class="k">拟融金额</div>
+        <div class="v soft">面议</div>
+      </div>
+      <div class="card" data-reveal data-d="2">
+        <div class="k">出让股比 / 估值</div>
+        <div class="v soft">面议</div>
+      </div>
+      <div class="card" data-reveal data-d="3">
+        <div class="k">资金支撑</div>
+        <div class="v soft">至关键里程碑</div>
+      </div>
+    </div>
+    <!-- 待确认:用途拆分比例 -->
+    <div class="use-row" data-reveal data-d="3">
+      <span><b>算法研发</b>认知引擎与数据飞轮</span>
+      <span><b>产品与交付</b>双线产品打磨与 B 端母版</span>
+      <span><b>市场验证</b>首批课程内容与用户增长</span>
+    </div>
+    <p class="note" data-reveal data-d="4"><b>资金兑现的里程碑</b>即第 12 页所列:双线产品交付 → 首单结项与复制 → C 端首个闭环课程走出 β。</p>
+    <div class="contact" data-reveal data-d="4">
+      <p class="cta">欢迎当面细聊完整数据与产品演示</p>
+      <div class="ways">
+        <span>✉ <a href="mailto:leexeo0524@gmail.com">leexeo0524@gmail.com</a></span>
+        <span>⌂ <a href="https://www.nju-link.com" target="_blank" rel="noopener">nju-link.com</a></span>
+      </div>
+      <p style="margin-top:22px;font-size:12.5px;color:var(--muted-2)">© 2026 开达教育 · 南京大学 LINK 实验室创业团队</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  var deck=document.getElementById('deck');
+  var slides=deck.querySelectorAll('.slide');
+  var N=slides.length;
+  var cur=-1;
+  var mobile=window.matchMedia('(max-width:820px)');
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* dots */
+  var dots=document.getElementById('dots');
+  for(var i=0;i<N;i++){
+    var b=document.createElement('button');
+    b.title=(i+1<10?'0':'')+(i+1)+' · '+(slides[i].dataset.title||'');
+    b.setAttribute('aria-label',b.title);
+    (function(idx){b.addEventListener('click',function(){go(idx);});})(i);
+    dots.appendChild(b);
+  }
+  var dotBtns=dots.querySelectorAll('button');
+  document.getElementById('pg-all').textContent=String(N);
+
+  function pad(n){return (n<10?'0':'')+n}
+
+  function go(i,skipHash){
+    i=Math.max(0,Math.min(N-1,i));
+    if(i===cur)return;
+    cur=i;
+    deck.style.setProperty('--i',i);
+    document.getElementById('pg-cur').textContent=pad(i+1);
+    document.getElementById('prog').style.width=((i+1)/N*100)+'%';
+    dotBtns.forEach(function(d,k){d.classList.toggle('on',k===i)});
+    if(!skipHash){
+      try{history.replaceState(null,'','#/'+pad(i+1));}catch(e){}
+    }
+    if(i>0)hideHint();
+  }
+
+  /* hint fade */
+  var hintHidden=false;
+  function hideHint(){
+    if(hintHidden)return;hintHidden=true;
+    var h=document.getElementById('hint');
+    h.style.transition='opacity .6s';h.style.opacity='0';
+    setTimeout(function(){h.style.display='none'},700);
+  }
+  setTimeout(hideHint,9000);
+
+  /* hash */
+  function fromHash(){
+    var m=(location.hash||'').match(/#\/?(\d+)/);
+    return m?parseInt(m[1],10)-1:0;
+  }
+  window.addEventListener('hashchange',function(){go(fromHash(),true)});
+
+  /* keyboard */
+  document.addEventListener('keydown',function(e){
+    if(mobile.matches)return;
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    switch(e.key){
+      case 'ArrowRight':case 'PageDown':case ' ':e.preventDefault();go(cur+1);break;
+      case 'ArrowLeft':case 'PageUp':e.preventDefault();go(cur-1);break;
+      case 'Home':e.preventDefault();go(0);break;
+      case 'End':e.preventDefault();go(N-1);break;
+      case 'f':case 'F':toggleFS();break;
+    }
+  });
+
+  /* fullscreen */
+  function toggleFS(){
+    if(document.fullscreenElement){document.exitFullscreen&&document.exitFullscreen();}
+    else{document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+  }
+  document.addEventListener('dblclick',function(e){
+    if(mobile.matches)return;
+    if(e.target.closest('a,button,input'))return;
+    toggleFS();
+  });
+
+  /* wheel: vertical scroll → horizontal paging, with in-slide scroll guard */
+  var acc=0,lastNav=0,accTimer=null;
+  document.addEventListener('wheel',function(e){
+    if(mobile.matches)return;
+    var inner=e.target.closest?e.target.closest('.inner'):null;
+    var d=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;
+    if(inner&&inner.scrollHeight>inner.clientHeight+2){
+      var atTop=inner.scrollTop<=0,atBottom=inner.scrollTop+inner.clientHeight>=inner.scrollHeight-2;
+      if((d>0&&!atBottom)||(d<0&&!atTop))return; /* let inner scroll */
+    }
+    e.preventDefault();
+    var now=Date.now();
+    if(now-lastNav<750)return;
+    acc+=d;
+    clearTimeout(accTimer);accTimer=setTimeout(function(){acc=0},260);
+    if(Math.abs(acc)>=52){
+      go(cur+(acc>0?1:-1));
+      lastNav=now;acc=0;
+    }
+  },{passive:false});
+
+  /* touch swipe (desktop-mode touch devices) */
+  var tx=0,ty=0;
+  document.addEventListener('touchstart',function(e){
+    tx=e.touches[0].clientX;ty=e.touches[0].clientY;
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(mobile.matches)return;
+    var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))go(cur+(dx<0?1:-1));
+  },{passive:true});
+
+  /* reveal via IntersectionObserver (works both horizontal & vertical) */
+  if(!reduce&&'IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){if(en.isIntersecting)en.target.classList.add('in')});
+    },{threshold:0.06});
+    document.querySelectorAll('[data-reveal]').forEach(function(el){obs.observe(el)});
+  }else{
+    document.querySelectorAll('[data-reveal]').forEach(function(el){el.classList.add('in')});
+  }
+
+  /* init */
+  go(fromHash(),true);
+  try{history.replaceState(null,'','#/'+pad(cur+1));}catch(e){}
+})();
+</script>
+</body>
+</html>
