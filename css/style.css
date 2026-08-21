@@ -295,6 +295,20 @@ footer {
     color: #6c757d;
 }
 
+footer .icp-beian {
+    margin-top: 6px;
+    font-size: 0.85em;
+}
+
+footer .icp-beian a {
+    color: inherit;
+    text-decoration: none;
+}
+
+footer .icp-beian a:hover {
+    text-decoration: underline;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .profile-header {
