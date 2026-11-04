@@ -1,0 +1,53 @@
+name: Deploy lishihao.cn
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-lishihao-cn
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Publish the current main commit
+        env:
+          DEPLOY_KEY: ${{ secrets.LISHIHAO_CN_DEPLOY_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          main_sha=$(git ls-remote --exit-code origin refs/heads/main | cut -f1)
+          if [[ "$main_sha" != "$GITHUB_SHA" ]]; then
+            echo "A newer main commit will deploy."
+            exit 0
+          fi
+
+          site="$RUNNER_TEMP/site"
+          mkdir "$site"
+          git archive "$GITHUB_SHA" | tar -x -C "$site"
+
+          install -d -m 700 ~/.ssh
+          umask 077
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/site_key
+          unset DEPLOY_KEY
+          trap 'rm -f ~/.ssh/site_key' EXIT
+          echo 'lishihao.cn ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3sDMZP7/cxRqJfnkpA4hKkC4cMW+x4lCAAmPugDn/v' > ~/.ssh/site_hosts
+          transport='ssh -i ~/.ssh/site_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/site_hosts -o ConnectTimeout=20'
+          rsync -rci --delay-updates --delete-delay --timeout=120 \
+            --exclude='.*' --filter='P /bp/design-lab.html' \
+            -e "$transport" "$site/" sitepublish@lishihao.cn::website/
+
+          # Check both public language entry points and their shared assets.
+          for file in index.html index-en.html css/style.css js/main.js; do
+            curl --retry 3 -fsSL "https://lishihao.cn/$file?deploy=$GITHUB_SHA" | cmp "$site/$file" -
+          done
